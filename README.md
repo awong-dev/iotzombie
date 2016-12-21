@@ -9,4 +9,4 @@ if it's older. This eventual consistency model does not require
 a server side persistent datastore.
 
 Endpoints:
-/light - IOT state server for lights in the house.
+/lights - IOT state server for lights in the house.

@@ -1,3 +1,7 @@
-node_modules
-*.log
+build
 config.json
+node_modules
+.babelcache
+
+*.log
+*.sw[op]

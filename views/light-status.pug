@@ -1,0 +1,8 @@
+html
+  head
+    title Light status for #{location}
+    link(rel="manifest" href="/manifest.json")
+    script(src="/generated/lights.entry.js")
+  body
+    each data, key in lights
+      button(class="btn-primary light-btn" data-lightid=`${key}`) #{data.name}
