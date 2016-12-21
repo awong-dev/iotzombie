@@ -1,8 +1,14 @@
-html
+html(class="no-js" lang="en")
   head
     title Light status for #{location}
+    meta(charset="utf-8")
+    meta(http-equiv="x-ua-compatible" content="ie=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
     link(rel="manifest" href="/manifest.json")
+    link(rel="stylesheet" href="/generated/lights.css")
     script(src="/generated/lights.entry.js")
   body
-    each data, key in lights
-      button(class="btn-primary light-btn" data-lightid=`${key}`) #{data.name}
+    .callout
+      each data, key in lights
+        .row
+            button.small-12.columns(class="button expand button-light" data-lightid=`${key}`) #{data.name}

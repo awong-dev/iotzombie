@@ -1,22 +1,19 @@
 function updateButton(button, state) {
   if (state === null) {
-    button.classList.remove('btn-light-on');
-    button.classList.remove('btn-light-off');
-    button.classList.add('btn-light-unknown');
+    button.classList.remove('secondary');
+    button.classList.add('alert');
   } else if (state.isOn === true) {
-    button.classList.remove('btn-light-unknown');
-    button.classList.remove('btn-light-off');
-    button.classList.add('btn-light-on');
+    button.classList.remove('secondary');
+    button.classList.remove('alert');
   } else if (state.isOn === false) {
-    button.classList.remove('btn-light-unknown');
-    button.classList.remove('btn-light-on');
-    button.classList.add('btn-light-off');
+    button.classList.remove('alert');
+    button.classList.add('secondary');
   }
 }
 
 export function setLight(button) {
   button.disabled = true;
-  const isOn = button.classList.contains('btn-light-on');
+  const isOn = !button.classList.contains('secondary') && !button.classList.contains('alert');
 
   fetch(`/lights/${button.dataset.lightid}`, {
     method: 'post',
@@ -36,6 +33,6 @@ export function setLight(button) {
   }).catch(() => {
     updateButton(button, null);
   }).then((res) => {
-    setTimeout(() => {button.disabled = false;}, 1000);
+    button.disabled = false;
   });
 }
