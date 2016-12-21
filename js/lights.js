@@ -21,7 +21,8 @@ export default function setLight(button) {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ isOn: !isOn })
+    body: JSON.stringify({ isOn: !isOn }),
+    credentials: 'include'
   }).then((res) => {
     if (res.status === 200) {
       res.json().then((json) => {

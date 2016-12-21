@@ -11,4 +11,7 @@ html(class="no-js" lang="en")
     .callout
       each data, key in lights
         .row
-            button.small-12.columns(class="button expand button-light" data-lightid=`${key}`) #{data.name}
+            - var buttonClass = ''
+            - if (data.isOn === undefined) buttonClass = 'alert'
+            - else if (data.isOn === false) buttonClass = 'secondary'
+            button.small-12.columns(class=(`button expand button-light ${buttonClass}`) data-lightid=`${key}`) #{data.name}
