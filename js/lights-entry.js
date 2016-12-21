@@ -1,10 +1,10 @@
-require ('../sass/style.scss');
+import setLight from './lights';
 
-import { setLight } from "./lights.js";
+require('../sass/style.scss');
 
 function init() {
   const buttons = document.getElementsByClassName('button-light');
-  for (let btn of buttons) {
+  for (const btn of buttons) {
     btn.addEventListener('click', () => { setLight(btn); });
   }
 }

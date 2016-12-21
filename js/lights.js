@@ -11,7 +11,7 @@ function updateButton(button, state) {
   }
 }
 
-export function setLight(button) {
+export default function setLight(button) {
   button.disabled = true;
   const isOn = !button.classList.contains('secondary') && !button.classList.contains('alert');
 
@@ -21,7 +21,7 @@ export function setLight(button) {
       Accept: 'application/json',
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({isOn: !isOn})
+    body: JSON.stringify({ isOn: !isOn })
   }).then((res) => {
     if (res.status === 200) {
       res.json().then((json) => {
@@ -32,7 +32,7 @@ export function setLight(button) {
     }
   }).catch(() => {
     updateButton(button, null);
-  }).then((res) => {
+  }).then(() => {
     button.disabled = false;
   });
 }
