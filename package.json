@@ -6,7 +6,6 @@
   "private": true,
   "scripts": {
     "webpack": "webpack --config webpack.config.js",
-    "prestart": "npm run webpack",
     "start": "node app.js",
     "lint:js": "eslint --quiet --ext .js --ext .jsx js",
     "monitor": "nodemon app.js & npm run webpack -- --watch",
