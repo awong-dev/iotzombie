@@ -53,7 +53,7 @@ app.use('/', express.static('public'));
 
 app.use('/generated', express.static('build/generated'));
 
-app.use('/lights', auth, lightsRouter.ui);
+app.use('/lights', userAuth, lightsRouter.ui);
 
 app.use('/api/', function(req, res, next) {
   var contype = req.headers['content-type'];
@@ -62,7 +62,7 @@ app.use('/api/', function(req, res, next) {
   next();
 });
 
-app.use('/api/lights', auth, lightsRouter.api);
+app.use('/api/lights', userAuth, lightsRouter.api);
 
 if (module === require.main) {
   const server = app.listen(process.env.PORT || 8080, () => {
