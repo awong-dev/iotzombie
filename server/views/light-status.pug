@@ -9,9 +9,9 @@ html(class="no-js" lang="en")
     script(src="/generated/lights.entry.js")
   body
     .callout
-      each data, key in lights
+      each state, lightId in lightsState
         .row
             - var buttonClass = ''
-            - if (data.isOn === undefined) buttonClass = 'alert'
-            - else if (data.isOn === false) buttonClass = 'secondary'
-            button.small-12.columns(class=(`button expand button-light ${buttonClass}`) data-lightid=`${key}`) #{data.name}
+            - if (state.isOn === undefined) buttonClass = 'alert'
+            - else if (state.isOn === false) buttonClass = 'secondary'
+            button.small-12.columns(class=(`button expand button-light ${buttonClass}`) data-lightid=`${lightId}`) #{state.name}
