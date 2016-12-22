@@ -8,7 +8,7 @@ require('babel-polyfill');
 const isDevelopment = JSON.stringify(process.env.NODE_ENV) !== 'production';
 
 const config = {
-  entry: { lights: "./js/lights-entry.js" },
+  entry: { lights: "./client/lights-entry.js" },
   output: {
     path: path.join(__dirname, `./build/generated`),
     publicPath: '/generated/',

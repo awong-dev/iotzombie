@@ -13,22 +13,19 @@
     "test": "mocha test/index.js -t 30000"
   },
   "author": "Albert J. Wong",
-  "semistandard": {
-    "globals": [
-      "after",
-      "afterEach",
-      "before",
-      "beforeEach",
-      "describe",
-      "it"
-    ]
-  },
+  "license": "BSD-2-Clause",
+  "keywords": [
+    "iot"
+  ],
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "express-basic-auth": "^0.2.3",
+    "express-winston": "^2.1.2",
     "lodash": "^4.17.2",
-    "pug": "^2.0.0-beta6"
+    "morgan": "^1.7.0",
+    "pug": "^2.0.0-beta6",
+    "winston": "^2.3.0"
   },
   "devDependencies": {
     "babel": "^6.5.2",

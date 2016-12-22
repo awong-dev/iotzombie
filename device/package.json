@@ -1,0 +1,26 @@
+{
+  "name": "iotzombie-device",
+  "version": "1.0.0",
+  "description": "Runs on device to heartbeat status back to cloud server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awong-dev/iotzombie.git"
+  },
+  "keywords": [
+    "iot"
+  ],
+  "author": "Albert J. Wong",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/awong-dev/iotzombie/issues"
+  },
+  "homepage": "https://github.com/awong-dev/iotzombie#readme",
+  "dependencies": {
+    "request": "^2.79.0",
+    "winston": "^2.3.0"
+  }
+}

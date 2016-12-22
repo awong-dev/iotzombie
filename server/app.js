@@ -4,12 +4,37 @@ const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const basicAuth = require('express-basic-auth');
+const morgan = require('morgan');
+const winston = require('winston');
+
 const app = express();
 
-app.use(basicAuth({
+// Setup up logger.
+var logger = new winston.Logger({
+  transports: [
+    new winston.transports.Console({
+      level:            'debug',
+      handleExceptions: true,
+      json:             false,
+      colorize:         true,
+      timestamp: true
+    })
+  ],
+  exitOnError: false
+});
+
+logger.stream = {
+  write: (message, encoding) => {
+    logger.info(message);
+  }
+};
+ 
+app.use(require("morgan")("combined", { "stream": logger.stream }));
+
+const auth = basicAuth({
   users: { 'admin': 'supersecret' },
   challenge: true
-}));
+});
 
 app.use(bodyParser.json());
 
@@ -22,10 +47,17 @@ app.use('/', express.static('public'));
 
 app.use('/generated', express.static('build/generated'));
 
-app.get('/lights', (req, res) => {
+app.get('/lights', auth, (req, res) => {
   res.render('light-status.pug', { lights });
 });
 
+// Endpoint takes a status update in json. Parameters are:
+//   isOn: boolean. True or false for requested light state.
+//   deviceSequence: an id number (likely just a sequence, but a random number
+//                   works fine too) representing the device's idea of the current
+//                   "version" for its state. This is not required or used by the
+//                   webform. It's for receiving heartbeats so the device can
+//                   override the server state.
 app.post('/lights/:lightId', (req, res) => {
   // Determine if we should update by examining the deviceSequence value.
   // If present, it means the update is being posted by a device and the
@@ -41,16 +73,16 @@ app.post('/lights/:lightId', (req, res) => {
   // deviceSequence value and the server should assume it may control the
   // state.
   const deviceSequence = req.body.deviceSequence;
-  let shouldUpdate = true;
 
   // deviceSequence == undefined -- ignore
   // deviceSequence === recorded -- ignore.
   // deviceSequence !== recorded -- update
   // server == undefined -- update
   if (!(req.lightId in lights) ||
-      (deviceSequence !== undefined && deviceSequence !== lights[req.params.lightId].deviceSequence)) {
-console.log(req.params.lightId);
-console.log(req.body.isOn);
+      (deviceSequence !== undefined &&
+       deviceSequence !== lights[req.params.lightId].deviceSequence)) {
+    logger.debug(req.params.lightId);
+    logger.debug(req.body.isOn);
     const newValues = {
       isOn: req.body.isOn,
       deviceSequence
@@ -58,7 +90,7 @@ console.log(req.body.isOn);
     lights[req.params.lightId] = Object.assign(lights[req.params.lightId] || {}, newValues);
   }
 
-console.log(lights);
+  logger.debug(lights);
   res.json(lights[req.params.lightId]);
 });
 
