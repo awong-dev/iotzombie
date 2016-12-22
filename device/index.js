@@ -1,5 +1,11 @@
 'use strict';
 
+const deviceUser = process.env.DEVICE_USER;
+const deviceId = process.env.DEVICE_ID;
+const deviceName = process.env.DEVICE_NAME || 'test light';
+const devicePassword = process.env.DEVICE_PASSWORD;
+const iotzServer = process.env.IOTZ_SERVER || 'http://localhost:8080';
+
 const request = require('request');
 const winston = require('winston');
 const logger = new (winston.Logger)({
@@ -8,8 +14,7 @@ const logger = new (winston.Logger)({
   ]
 });
 
-const lightId = 'parlor';
-const lightState = { name: 'Parlor', isOn: false, deviceSequence: 0 };
+const lightState = { name: deviceName, isOn: false, deviceSequence: 0 };
 
 function updateLight(state) {
   // Talk to GPIO here.
@@ -43,12 +48,12 @@ function processStatusUpdate(err, resp, body) {
 
 function sendHeartbeat() {
   request.post( {
-    url: `https://iotzombie-153122.appspot-preview.com/lights/${lightId}`,
+    url: `${iotzServer}/lights/${deviceId}`,
     method: 'POST',
     json: lightState,
     auth: {
-      user: 'admin',
-      pass: 'supersecret',
+      user: deviceUser,
+      pass: devicePassword,
       sendImmediately: false
     }
   },

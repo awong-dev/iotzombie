@@ -9,9 +9,13 @@ html(class="no-js" lang="en")
     script(src="/generated/lights.entry.js")
   body
     .callout
-      each state, lightId in lightsState
+      - if (Object.keys(lightsState).length > 0)
+        each state, lightId in lightsState
+          .row
+              - var buttonClass = ''
+              - if (state.isOn === undefined) buttonClass = 'alert'
+              - else if (state.isOn === false) buttonClass = 'secondary'
+              button.small-12.columns(class=(`button expand button-light ${buttonClass}`) data-lightid=`${lightId}`) #{state.name}
+      - else
         .row
-            - var buttonClass = ''
-            - if (state.isOn === undefined) buttonClass = 'alert'
-            - else if (state.isOn === false) buttonClass = 'secondary'
-            button.small-12.columns(class=(`button expand button-light ${buttonClass}`) data-lightid=`${lightId}`) #{state.name}
+          .small-12.callout No lights registered

@@ -37,8 +37,13 @@ const lightsRouter = require('./routes/lights')(options);
  
 app.use(require("morgan")("combined", { "stream": logger.stream }));
 
-const auth = basicAuth({
-  users: { 'admin': 'supersecret' },
+const userAuth = basicAuth({
+  users: JSON.parse(process.env.USER_AUTH || {}),
+  challenge: true
+});
+
+const deviceAuth = basicAuth({
+  users: JSON.parse(process.env.DEVICE_AUTH || {}),
   challenge: true
 });
 
@@ -48,7 +53,7 @@ app.use('/', express.static('public'));
 
 app.use('/generated', express.static('build/generated'));
 
-app.use('/lights', auth, lightsRouter.web);
+app.use('/lights', auth, lightsRouter.ui);
 
 app.use('/api/', function(req, res, next) {
   var contype = req.headers['content-type'];
