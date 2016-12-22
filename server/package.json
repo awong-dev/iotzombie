@@ -10,7 +10,7 @@
     "lint:js": "eslint --quiet --ext .js --ext .jsx js",
     "monitor": "nodemon app.js & npm run webpack -- --watch",
     "deploy": "gcloud app deploy app.yaml",
-    "test": "mocha test/index.js -t 30000"
+    "test": "mocha --compilers js:babel-register --recursive test/**/*.spec.js -t 30000"
   },
   "author": "Albert J. Wong",
   "license": "BSD-2-Clause",
