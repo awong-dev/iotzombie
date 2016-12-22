@@ -5,7 +5,7 @@ const _ = require('lodash');
 
 require('babel-polyfill');
 
-const isDevelopment = JSON.stringify(process.env.NODE_ENV) !== 'production';
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const config = {
   entry: { lights: "./client/lights-entry.js" },
@@ -48,9 +48,9 @@ if (isDevelopment) {
   config.devtool = '#eval-source-map';
 } else {
   config.devtool = '#source-map';
-  baseConfig.plugins.push(new webpack.optimize.DedupePlugin());
-  baseConfig.plugins.push(new webpack.optimize.OccurrenceOrderPlugin(true));
-  baseConfig.plugins.push(new webpack.optimize.UglifyJsPlugin());
+  config.plugins.push(new webpack.optimize.DedupePlugin());
+  config.plugins.push(new webpack.optimize.OccurrenceOrderPlugin(true));
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin());
 }
 
 module.exports = config;
