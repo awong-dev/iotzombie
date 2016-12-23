@@ -15,7 +15,7 @@ export default function setLight(button) {
   button.disabled = true;
   const isOn = !button.classList.contains('secondary') && !button.classList.contains('alert');
 
-  fetch(`/api/lights/web/${button.dataset.lightid}`, {
+  fetch(`/api/lights/ui/${button.dataset.lightid}`, {
     method: 'post',
     headers: {
       Accept: 'application/json',

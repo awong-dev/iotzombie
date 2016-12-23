@@ -38,12 +38,12 @@ const lightsRouter = require('./routes/lights')(options);
 app.use(require("morgan")("combined", { "stream": logger.stream }));
 
 const userAuth = basicAuth({
-  users: JSON.parse(process.env.USER_AUTH || {}),
+  users: JSON.parse(process.env.USER_AUTH || '{}'),
   challenge: true
 });
 
 const deviceAuth = basicAuth({
-  users: JSON.parse(process.env.DEVICE_AUTH || {}),
+  users: JSON.parse(process.env.DEVICE_AUTH || '{}'),
   challenge: true
 });
 
@@ -67,7 +67,7 @@ app.use('/api/lights', userAuth, lightsRouter.api);
 if (module === require.main) {
   const server = app.listen(process.env.PORT || 8080, () => {
     const port = server.address().port;
-    console.log(`App listening on port ${port}`);
+    logger.log(`App listening on port ${port}`);
   });
 }
 

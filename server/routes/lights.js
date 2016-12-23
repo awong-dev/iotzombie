@@ -39,15 +39,20 @@ const returnRouter = (options) => {
     // If the device has a newer state, it is authoritative. Otherwise, we are
     // authoritative.
     const lightId = req.params.lightId;
+    const lastHeartbeat = new Date();
     if (!(lightId in lightsState) ||
         req.body.deviceSequence !== lightsState[lightId].deviceSequence) {
       lightsState[lightId] = {
         deviceSequence: req.body.deviceSequence,
         name: req.body.name,
         isOn: req.body.isOn,
-        lastHeartbeat: new Date()
+        lastHeartbeat
       };
-      logger.debug(`Added ${lightId} to ${lightsState[lightId]}`);
+      logger.info(`Added ${lightId} with ${JSON.stringify(lightsState[lightId])}`);
+    } else {
+      // Just update the heartbeat.
+      lightsState[lightId].lastHeartbeat = lastHeartbeat;
+      logger.info(`Heartbeat: ${JSON.stringify(lightsState[lightId])}`);
     }
 
     res.json(lightsState[lightId]);
