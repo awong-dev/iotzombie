@@ -4,6 +4,9 @@ env: flex
 skip_files:
  - ^node_modules$
 
+manual_scaling:
+  instances: 1
+
 env_variables:
   USER_AUTH: '{ "admin": "supersecret" }'
   DEVICE_AUTH: '{}'
