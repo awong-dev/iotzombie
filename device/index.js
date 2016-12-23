@@ -6,7 +6,7 @@ const deviceName = process.env.DEVICE_NAME || 'test light';
 const devicePassword = process.env.DEVICE_PASSWORD;
 const iotzServer = process.env.IOTZ_SERVER || 'http://localhost:8080';
 
-const gpio = require('pi-gpio');
+const gpio = require('rpi-gpio');
 const request = require('request');
 const winston = require('winston');
 const logger = new (winston.Logger)({
@@ -26,9 +26,9 @@ function updateLight(isOn) {
   // Pin 16 is GPIO23 which Defaults to pull-down. Set it that way anyways
   // just to be certain.  Low is off on the relay.
   const lightControlPin = 16;
-  gpio.open(lightControlPin, "output down", (err) => {
-      gpio.write(lightControlPin, isOn ? 1 : 0, () => {
-          gpio.close(lightControlPin);
+  gpio.setup(lightControlPin, gpio.DIR_OUT, () => {
+      gpio.write(lightControlPin, isOn ? 1 : 0, (err) => {
+        logger.error("Unable to write: ${err}");
       });
   });
 }

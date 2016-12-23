@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/awong-dev/iotzombie#readme",
   "dependencies": {
-    "pi-gpio": "0.0.8",
     "request": "^2.79.0",
+    "rpi-gpio": "^0.7.0",
     "winston": "^2.3.0"
   }
 }
