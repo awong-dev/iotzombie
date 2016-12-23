@@ -97,11 +97,17 @@ function sendHeartbeat(state) {
 
 if (module === require.main) {
   const lightState = { name: deviceName, isOn: false, deviceSequence: 0 };
-  const heartbeatPeriod = 10000;
+  const heartbeatPeriod = 5000;
   setupGpio();
   updateLight(lightState.isOn);
   sendHeartbeat(lightState);
-  setInterval(() => { sendHeartbeat(lightState) }, heartbeatPeriod);
+  const startHeartbeat = () => {
+    sendHeartbeat(lightState);
+
+    // Jittered heartbeat.
+    setTimeout(startHeartbeat, (heartbeatPeriod / 2)  + (Math.random() * heartbeatPeriod));
+  };
+  startHeartbeat();
   logger.info(`Heatbeat started. Period: ${heartbeatPeriod}`);
 }
 
