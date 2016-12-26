@@ -105,7 +105,7 @@ if (module === require.main) {
     sendHeartbeat(lightState);
 
     // Jittered heartbeat.
-    setTimeout(startHeartbeat, (heartbeatPeriod / 2)  + (Math.random() * heartbeatPeriod));
+    setTimeout(startHeartbeat, (heartbeatPeriod / 2) + (Math.random() * heartbeatPeriod));
   };
   startHeartbeat();
   logger.info(`Heatbeat started. Period: ${heartbeatPeriod}`);

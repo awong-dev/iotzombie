@@ -7,7 +7,7 @@
   "scripts": {
     "webpack": "webpack --config webpack.config.js",
     "start": "node app.js",
-    "lint:js": "eslint --quiet --ext .js --ext .jsx js",
+    "lint:js": "eslint --quiet --ext .js --ext .jsx .",
     "monitor": "nodemon app.js & npm run webpack -- --watch",
     "deploy": "node generate-app-yaml.js && gcloud app deploy app.yaml",
     "test": "mocha --compilers js:babel-register --recursive test/**/*.spec.js -t 30000"

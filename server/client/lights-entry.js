@@ -1,4 +1,4 @@
-import setLight from './lights';
+import { default as setLight, startRefresh } from './lights';
 
 require('../sass/style.scss');
 
@@ -7,6 +7,7 @@ function init() {
   for (let idx = 0; idx < buttons.length; idx++) {
     const btn = buttons[idx];
     btn.addEventListener('click', () => { setLight(btn); });
+    startRefresh(btn);
   }
 }
 

@@ -7,6 +7,7 @@ const returnRouter = (options) => {
 
   // TODO(awong): Expire if there is no status heartbeat.
   const lightsState = {
+    parlor: {deviceSequence:0, name: "Parlor", isOn:false, lastHeartbeat: new Date() }
   };
 
   const router = express.Router();
@@ -78,6 +79,19 @@ const returnRouter = (options) => {
     lightsState[lightId].isOn = req.body.isOn;
 
     logger.debug(`Set ${lightId} to ${JSON.stringify(lightsState[lightId])}`);
+    res.json(lightsState[lightId]);
+  });
+
+  apiRouter.get('/ui/:lightId', (req, res) => {
+    const lightId = req.params.lightId;
+    if (!(lightId in lightsState)) {
+      const error = `Unknown light: ${lightId}`
+      logger.warn(error);
+      logger.warn(lightsState);
+      return res.status(400).json({ error });
+    }
+
+    logger.debug(`Get ${lightId}: ${JSON.stringify(lightsState[lightId])}`);
     res.json(lightsState[lightId]);
   });
 

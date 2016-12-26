@@ -11,10 +11,10 @@ html(class="no-js" lang="en")
     meta(name="msapplication-TileImage" content="/img/iotz-icon-144.png")
     script(src="/generated/lights.entry.js")
   body
-    .callout
+    .panel
       - if (Object.keys(lightsState).length > 0)
         each state, lightId in lightsState
-          .row
+          .row.button-nav-iotz
               - var buttonClass = ''
               - if (state.isOn === undefined) buttonClass = 'alert'
               - else if (state.isOn === false) buttonClass = 'secondary'
