@@ -1,3 +1,5 @@
+import 'whatwg-fetch';
+
 function updateButton(button, state) {
   if (state === null) {
     button.classList.remove('secondary');

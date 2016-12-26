@@ -9,7 +9,7 @@
     "start": "node app.js",
     "lint:js": "eslint --quiet --ext .js --ext .jsx js",
     "monitor": "nodemon app.js & npm run webpack -- --watch",
-    "deploy": "gcloud app deploy app.yaml",
+    "deploy": "node generate-app-yaml.js && gcloud app deploy app.yaml",
     "test": "mocha --compilers js:babel-register --recursive test/**/*.spec.js -t 30000"
   },
   "author": "Albert J. Wong",
@@ -50,7 +50,8 @@
     "sass-loader": "^4.1.0",
     "style-loader": "^0.13.1",
     "supertest": "^2.0.1",
-    "webpack": "^1.14.0"
+    "webpack": "^1.14.0",
+    "whatwg-fetch": "^2.0.1"
   },
   "engines": {
     "node": ">=6.0.0"

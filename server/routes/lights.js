@@ -77,7 +77,7 @@ const returnRouter = (options) => {
 
     lightsState[lightId].isOn = req.body.isOn;
 
-    logger.debug(`Set ${lightId} to ${lightsState[lightId]}`);
+    logger.debug(`Set ${lightId} to ${JSON.stringify(lightsState[lightId])}`);
     res.json(lightsState[lightId]);
   });
 
