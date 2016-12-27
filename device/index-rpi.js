@@ -12,7 +12,7 @@ const lightControlGpio = 16;
 const gpioRoot = '/sys/class/gpio';
 const gpioLightControlPath = `${gpioRoot}/gpio${lightControlGpio}`;
 
-const fs = require('fs');
+const async = require('async');
 const gpio = require('rpi-gpio');
 const request = require('request');
 const winston = require('winston');
@@ -103,7 +103,7 @@ if (module === require.main) {
       setupGpio,
       (cb) => updateLight(lightState.isOn, cb),
     ],
-    (err) {
+    (err) => {
       if (err) {
         logger.error(JSON.stringify(err));
       }
