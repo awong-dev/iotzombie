@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/awong-dev/iotzombie#readme",
   "dependencies": {
+    "async": "^2.1.4",
     "request": "^2.79.0",
+    "rpi-gpio": "git+https://github.com/aztecrex/rpi-gpio.js.git",
     "winston": "^2.3.0"
   },
   "devDependencies": {}
