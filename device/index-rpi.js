@@ -6,11 +6,15 @@ const deviceName = process.env.DEVICE_NAME || 'test light';
 const devicePassword = process.env.DEVICE_PASSWORD;
 const iotzServer = process.env.IOTZ_SERVER || 'http://localhost:8080';
 
-// GPIO16 (is pin 36) which defaults to pull-down. Set it that way anyways
-// just to be certain.  Low is off on the relay.
-const lightControlGpio = 16;
-const gpioRoot = '/sys/class/gpio';
-const gpioLightControlPath = `${gpioRoot}/gpio${lightControlGpio}`;
+// GPIO16 (physical pin 36) defaults to pull-down. Low is off on the relay
+// so this is a good default.
+const lightPowerGpio = 16;
+
+// GPIO3 (physical pin 5) defaults to pull-up. Having the switch sourced
+// to ground felt better...no real reason otherwise for the choice. It means
+// interrupt should trigger on falling edge and expect false on read for
+// debounce.
+const lightSwitchGpio = 3;
 
 const async = require('async');
 const gpio = require('rpi-gpio');
@@ -29,25 +33,63 @@ const logger = new (winston.Logger)({
   ]
 });
 
+function listenForSwitch(state) {
+  // Interrupts are expressed as 'change' events from Gpio using the
+  // EventEmitter interface. Use `once` to implement software debounce.
+  // Using 10ms for debounce seems to provide good protection and
+  // responsiveness.
+  gpio.once('change', () => {
+      setTimeout(() => {
+        // Actually attempt to read the input value after 10 secs
+        // and then reschedule the listener.
+        async.waterfall([
+            (cb) => {
+              gpio.read(lightSwitchGpio, (err, value) => {
+                cb(err, value === false);
+              });
+            }
+            (shouldToggle, cb) => toggleLight(state, shouldToggle, cb)
+          ],
+          (err, value) => {
+            if (err) {
+              logger.error(JSON.stringify(err));
+            }
+            listenForSwitch(state);
+          });
+      }, 10);
+    });
+}
 
 function setupGpio(done) {
   gpio.setMode(gpio.MODE_BCM);
   async.series([
-      (cb) => gpio.setup(lightControlGpio, gpio.DIR_OUT, cb),
+      (cb) => gpio.setup(lightPowerGpio, gpio.DIR_OUT, cb),
+      (cb) => gpio.setup(lightSwitchGpio, gpio.DIR_IN, gpio.EDGE_FALLING, cb),
     ],
     (err) => done(err)
     );
 }
 
 function updateLight(isOn, cb) {
-  gpio.write(lightControlGpio, isOn ? '1' : '0', (err) => {
+  gpio.write(lightPowerGpio, isOn ? '1' : '0', (err) => {
     return cb(err);
   });
 }
 
-function toggleLight(state) {
-  // Talk to GPIO here.
-  lightState.isOn = !lightState.isOn;
+function toggleLight(state, shouldToggle, cb) {
+  if (shouldToggle) {
+    Object.assign(state, {
+        isOn: !state.isOn,
+        deviceSequence: state.deviceSequence + 1
+      });
+    async.waterfall([
+        (cb) => updateLight(state.isOn, cb),
+        (cb) => sendHeartbeat(cb)
+      ],
+      (err) => cb(err));
+  } else {
+    cb(null);
+  }
 }
 
 function processStatusUpdate(err, resp, body, prevState, cb) {
@@ -87,10 +129,10 @@ function sendHeartbeat(state, done) {
   (err, resp, body) => {
     processStatusUpdate(err, resp, body, state, (err, newState) => {
         if (err) {
-          console.error(JSON.stringify(err));
+          return done(err);
         }
         Object.assign(state, newState);
-        done();
+        done(null);
       });
   });
 }
@@ -109,11 +151,15 @@ if (module === require.main) {
       }
     });
   const startHeartbeat = () => {
-    sendHeartbeat(lightState, () => {
+    sendHeartbeat(lightState, (err) => {
         // Jittered heartbeat.
+        if (err) {
+          console.error(JSON.stringify(err));
+        }
         setTimeout(startHeartbeat, (heartbeatPeriod / 2) + (Math.random() * heartbeatPeriod));
       });
   };
+  listenForSwitch(lightState);
   startHeartbeat();
   logger.info(`Heatbeat started. Period: ${heartbeatPeriod}`);
 }
