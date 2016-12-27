@@ -47,7 +47,7 @@ function listenForSwitch(state) {
               gpio.read(lightSwitchGpio, (err, value) => {
                 cb(err, value === false);
               });
-            }
+            },
             (shouldToggle, cb) => toggleLight(state, shouldToggle, cb)
           ],
           (err, value) => {
@@ -84,7 +84,7 @@ function toggleLight(state, shouldToggle, cb) {
       });
     async.waterfall([
         (cb) => updateLight(state.isOn, cb),
-        (cb) => sendHeartbeat(cb)
+        (cb) => sendHeartbeat(state, cb)
       ],
       (err) => cb(err));
   } else {
