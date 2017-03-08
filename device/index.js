@@ -10,11 +10,11 @@ const iotzServer = process.env.IOTZ_SERVER || 'http://localhost:8080';
 // so this is a good default.
 const lightPowerGpio = 16;
 
-// GPIO3 (physical pin 5) defaults to pull-up. Having the switch sourced
+// GPIO8 (physical pin 24) defaults to pull-up. Having the switch sourced
 // to ground felt better...no real reason otherwise for the choice. It means
 // interrupt should trigger on falling edge and expect false on read for
 // debounce.
-const lightSwitchGpio = 3;
+const lightSwitchGpio = 8;
 
 const async = require('async');
 const gpio = require('rpi-gpio');
