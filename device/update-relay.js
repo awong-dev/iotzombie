@@ -40,7 +40,7 @@ module.exports = function (opts) {
           deviceSequence: state.deviceSequence + 1
         });
       async.waterfall([
-          (cb) => updateRelay(state.isOn, cb),
+          (cb) => updateRelay(state.isOn, storedTriggerFunc, cb),
           (cb) => () => { doTrigger(); cb(); }
         ],
         (err) => cb(err));
@@ -91,7 +91,7 @@ module.exports = function (opts) {
   async.series([
       setupGpio,
       (cb) => listenForSwitch(state, cb),
-      (cb) => updateRelay(state, cb),
+      (cb) => updateRelay(state, storedTriggerFunc, cb),
     ],
     (err) => {
       if (err) {
