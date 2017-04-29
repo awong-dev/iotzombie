@@ -70,7 +70,7 @@ module.exports = function (opts) {
             if (err) {
               logger.error(JSON.stringify(err));
             }
-            listenForSwitch(state);
+            listenForSwitch(state, done);
           });
       }, 10);
     });
