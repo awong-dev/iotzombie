@@ -62,7 +62,7 @@ app.use('/api/', function(req, res, next) {
   next();
 });
 
-app.use('/api/lights', userAuth, lightsRouter.api);
+app.use('/api/lights', deviceAuth, lightsRouter.api);
 
 if (module === require.main) {
   const server = app.listen(process.env.PORT || 8080, () => {
