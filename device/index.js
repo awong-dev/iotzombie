@@ -22,8 +22,8 @@ if (module === require.main) {
   const pumpState = { name: 'Pump', isOn: false, deviceSequence: 0 };
   const heartbeatPeriod = 5000;
 
-  const updateRelay = () => { logger.info('wut');};
-//  const updateRelay = require('./update-relay.js')({logger, state: lightState});
+//  const updateRelay = () => { logger.info('wut');};
+  const updateRelay = require('./update-relay.js')({logger, state: lightState});
   const updatePump = require('./pump.js')({logger, state: pumpState});
   const startHeartbeat = require('./heartbeat.js')({logger});
   startHeartbeat(lightState, deviceId, heartbeatPeriod, updateRelay);

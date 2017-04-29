@@ -25,7 +25,7 @@ module.exports = function(opts) {
         && prevState.isOn !== body.isOn) {
       const newState = Object.assign({}, prevState);
       newState.isOn = body.isOn;
-      logger.info(`Transitioning state from ${prevState} to ${newState}`);
+      logger.info(`Transitioning state from ${JSON.stringify(prevState)} to ${JSON.stringify(newState)}`);
       return onUpdate(newState, (err) => { cb(err, newState); });
     }
 
