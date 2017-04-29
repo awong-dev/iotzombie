@@ -22,6 +22,13 @@ function doTrigger() {
   }
 }
 
+function updateRelay(state, triggerFunc, cb) {
+  storedTriggerFunc = triggerFunc;
+  gpio.write(lightPowerGpio, state.isOn ? '1' : '0', (err) => {
+    return cb(err);
+  });
+}
+
 module.exports = function (opts) {
   const logger = opts.logger;
   const state = opts.state;
@@ -93,10 +100,5 @@ module.exports = function (opts) {
     });
 
 
-  return (function updateRelay(state, triggerFunc, cb) {
-      storedTriggerFunc = triggerFunc;
-      gpio.write(lightPowerGpio, state.isOn ? '1' : '0', (err) => {
-        return cb(err);
-      });
-    });
+  return updateRelay;
 };
