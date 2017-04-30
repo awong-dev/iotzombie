@@ -33,15 +33,15 @@ module.exports = function (opts) {
   const logger = opts.logger;
   const state = opts.state;
 
-  function toggleLight(state, shouldToggle, cb) {
+  function toggleLight(shouldToggle, cb) {
     if (shouldToggle) {
       Object.assign(state, {
           isOn: !state.isOn,
           deviceSequence: state.deviceSequence + 1
         });
       async.waterfall([
-          (cb) => updateRelay(state.isOn, storedTriggerFunc, cb),
-          (cb) => () => { doTrigger(); cb(); }
+          (cb) => updateRelay(state, storedTriggerFunc, cb),
+          (cb) => { doTrigger(); cb(); }
         ],
         (err) => cb(err));
     } else {
@@ -49,33 +49,30 @@ module.exports = function (opts) {
     }
   }
 
-  function listenForSwitch(state, done) {
+function listenForSwitch() {
     // Interrupts are expressed as 'change' events from Gpio using the
     // EventEmitter interface. Use `once` to implement software debounce.
-    // Using 10ms for debounce seems to provide good protection and
+    // Using 50ms for debounce seems to provide good protection and
     // responsiveness.
     gpio.once('change', () => {
-      setTimeout(() => {
-        // Actually attempt to read the input value after 10 secs
-        // and then reschedule the listener.
-        async.waterfall([
-            (cb) => {
-              gpio.read(lightSwitchGpio, (err, value) => {
-                cb(err, value === false);
-              });
-            },
-            (shouldToggle, cb) => toggleLight(state, shouldToggle, cb)
-          ],
-          (err, value) => {
-            if (err) {
-              logger.error(JSON.stringify(err));
-            }
-            listenForSwitch(state, done);
-          });
-      }, 10);
+      async.waterfall([
+          (cb) => {
+            gpio.read(lightSwitchGpio, (err, value) => {
+              // Only respond to button down.
+              cb(err, value === false);
+            });
+          },
+          toggleLight
+        ],
+        (err) => {
+          if (err) {
+            logger.error(JSON.stringify(err));
+          }
+          setTimeout(() => {
+              listenForSwitch();
+              }, 50);
+        });
     });
-
-    done();
   }
 
   function setupGpio(done) {
@@ -90,7 +87,7 @@ module.exports = function (opts) {
 
   async.series([
       setupGpio,
-      (cb) => listenForSwitch(state, cb),
+      (cb) => { listenForSwitch(); cb(); },
       (cb) => updateRelay(state, storedTriggerFunc, cb),
     ],
     (err) => {
