@@ -5,6 +5,7 @@
   "repository": "https://github.com/awong-dev/iotzombie.git",
   "private": true,
   "scripts": {
+    "firebase": "firebase",
     "webpack": "webpack --config webpack.config.js",
     "start": "node app.js",
     "lint:js": "eslint --quiet --ext .js --ext .jsx .",
@@ -22,6 +23,7 @@
     "express": "^4.14.0",
     "express-basic-auth": "^0.2.3",
     "express-winston": "^2.1.2",
+    "firebase-functions": "^0.6.3",
     "lodash": "^4.17.2",
     "morgan": "^1.7.0",
     "pug": "^2.0.0-beta6",

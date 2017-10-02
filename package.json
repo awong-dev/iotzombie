@@ -1,0 +1,13 @@
+{
+  "name": "IotZombieDev",
+  "description": "Dev server for IoTZombie",
+  "dependencies": {
+  },
+  "scripts": {
+    "firebase": "firebase"
+  },
+  "private": true,
+  "devDependencies": {
+    "firebase-tools": "^3.12.0"
+  }
+}
