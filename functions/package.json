@@ -5,7 +5,8 @@
     "body-parser": "^1.18.2",
     "express": "^4.16.1",
     "firebase-admin": "~5.2.1",
-    "firebase-functions": "^0.6.3"
+    "firebase-functions": "^0.6.3",
+    "lodash": "^4.17.4"
   },
   "scripts": {
     "firebase": "firebase"
