@@ -42,7 +42,7 @@
     'react/no-direct-mutation-state': 2,
     'react/no-string-refs': 2,
     'react/prop-types': 2,
-    'react/jsx-space-before-closing': [2, 'never']
+    'react/jsx-tag-spacing': [2, 'beforeSelfClosing']
   },
   'parserOptions': {
     'ecmaVersion': 6,

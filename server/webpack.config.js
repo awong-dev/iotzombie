@@ -1,11 +1,16 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
+const glob = require('glob');
 const webpack = require('webpack');
 const _ = require('lodash');
 
 require('babel-polyfill');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
+
+const extractSass = new ExtractTextPlugin({
+      filename: "[name].css"
+});
 
 const config = {
   entry: { lights: "./client/lights-entry.js" },
@@ -15,22 +20,35 @@ const config = {
     filename: '[name].entry.js'
   },
   module: {
+    rules: [
+      {
+        test: /\.scss$/,
+        use: extractSass.extract({
+          use: [
+            { loader: 'css-loader' },
+            { loader: 'sass-loader',
+              options: {
+                sourceMap: true,
+                includePaths: glob.sync('node_modules').map((d) => path.join(__dirname, d)),
+              } }
+          ],
+          fallback: 'style-loader'
+        })
+      },
+
+    ],
     loaders: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel',
+        loader: 'babel-loader',
         query: {
           // Speed up compilation.
           cacheDirectory: '.babelcache'
 
           // Also see .babelrc
         }
-      },
-      {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract('style-loader', `css-loader!sass-loader`)
-      },
+      }
     ],
   },
   plugins: [
@@ -40,7 +58,7 @@ const config = {
       }
     }),
 
-    new ExtractTextPlugin('[name].css'),
+    extractSass
   ],
 };
 
