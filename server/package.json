@@ -1,16 +1,15 @@
 {
   "name": "iot-zombie",
-  "version": "1.0.0",
-  "description": "Simple node.js server for orchtestrating IOT devices.",
+  "description": "Google cloud functions and firebase implemenation for orchestrating IOT devices",
   "repository": "https://github.com/awong-dev/iotzombie.git",
-  "private": true,
+  "dependencies": {
+  },
   "scripts": {
     "firebase": "firebase",
     "webpack": "webpack --config webpack.config.js",
-    "start": "node app.js",
     "lint:js": "eslint --quiet --ext .js --ext .jsx .",
-    "monitor": "nodemon app.js & npm run webpack -- --watch",
     "deploy": "node generate-app-yaml.js && gcloud app deploy app.yaml",
+    "watch": "npm run firebase -- serve --debug --only functions,hosting & npm run webpack -- --watch",
     "test": "mocha --compilers js:babel-register --recursive test/**/*.spec.js -t 30000"
   },
   "author": "Albert J. Wong",
@@ -18,18 +17,9 @@
   "keywords": [
     "iot"
   ],
-  "dependencies": {
-    "body-parser": "^1.15.2",
-    "express": "^4.14.0",
-    "express-basic-auth": "^0.2.3",
-    "express-winston": "^2.1.2",
-    "firebase-functions": "^0.6.3",
-    "lodash": "^4.17.2",
-    "morgan": "^1.7.0",
-    "pug": "^2.0.0-beta6",
-    "winston": "^2.3.0"
-  },
+  "private": true,
   "devDependencies": {
+    "firebase-tools": "^3.12.0",
     "babel": "^6.5.2",
     "babel-core": "^6.21.0",
     "babel-eslint": "^7.1.1",
@@ -54,8 +44,5 @@
     "supertest": "^2.0.1",
     "webpack": "^1.14.0",
     "whatwg-fetch": "^2.0.1"
-  },
-  "engines": {
-    "node": ">=6.0.0"
   }
 }

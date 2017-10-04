@@ -1,6 +1,7 @@
 {
   "hosting": {
     "public": "public",
+    "generated": "build/generated",
     "rewrites": [
       { "source": "/api/**", "function": "api" }
     ]
