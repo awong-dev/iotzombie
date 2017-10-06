@@ -4,8 +4,6 @@ const glob = require('glob');
 const webpack = require('webpack');
 const _ = require('lodash');
 
-require('babel-polyfill');
-
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const extractSass = new ExtractTextPlugin({
@@ -13,7 +11,8 @@ const extractSass = new ExtractTextPlugin({
 });
 
 const config = {
-  entry: { lights: "./client/lights-entry.js" },
+  entry: { lights: ["./client/lights-entry.jsx"] },
+  resolve: { extensions: ['.js', '.jsx'] },
   output: {
     path: path.join(__dirname, `./build/generated`),
     publicPath: '/generated/',
@@ -35,26 +34,23 @@ const config = {
           fallback: 'style-loader'
         })
       },
-
-    ],
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          // Speed up compilation.
-          cacheDirectory: '.babelcache'
-
-          // Also see .babelrc
-        }
-      }
+	 {
+	   test: /\.jsx?$/,
+	   exclude: /node_modules/,
+	   use: {
+		loader: 'babel-loader',
+		options: {
+		  // Also see .babelrc
+		  cacheDirectory: '.babelcache'
+		}
+	   }
+	 }
     ],
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: isDevelopment ? 'production' : 'development'
+        NODE_ENV: isDevelopment ? "'production'" : "'development'"
       }
     }),
 
