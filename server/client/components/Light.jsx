@@ -1,13 +1,13 @@
 import React from 'react';
 
-class Light extends React.Component {
-  render() {
-    return (
-      <div className="component-app">
-	   <p>I'm a light 2!</p>
-      </div>
-    );
-  }
+const Light = ({onClick, lightName, lightId}) => {
+  return (
+    <div>
+      <button className="mdc-button mdc-button--unelevated" onClick={onClick} data-mdc-auto-init="MDCRipple">
+        {lightName}
+      </button>
+    </div>
+  );
 }
 
 export default Light;

@@ -1,27 +1,30 @@
 import React from 'react';
 import Light from './Light';
 
-class DeviceList extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      total: null,
-      next: null,
-      operation: null,
-    };
+const DeviceList = ({devices}) => {
+  const elementsByType = {};
+  for (let d of devices) {
+    let list = elementsByType[d.type];
+    if (!list) {
+      list = elementsByType[d.type] = [];
+    }
+    list.push(
+      <li className="mdc-list-item"><Light lightName={d.name} /></li>
+    )
   }
-
-  render() {
-    return (
-      <div className="component-app">
-	   <p> Hi mom hi</p>
-	   <Light />
-	   <Light />
-        <p>d</p>
-	   <Light />
-      </div>
-    );
-  }
+  return (
+    <div class="mdc-list-group">
+      <h3 class="mdc-list-group__subheader">Lights</h3>
+      <ul className="mdc-list">
+        {elementsByType['light']}
+      </ul>
+      <hr class="mdc-list-divider" />
+      <h3 class="mdc-list-group__subheader">Buttons</h3>
+      <ul className="mdc-list">
+        {elementsByType['button']}
+      </ul>
+    </div>
+  );
 }
 
 export default DeviceList;

@@ -1,17 +1,12 @@
 import { AppContainer } from 'react-hot-loader'
 import React from 'react';
 import ReactDOM from 'react-dom'
-import DeviceList from './components/DeviceList'
+import App from './components/App'
+
+import mdcAutoInit from '@material/auto-init';
+import { MDCRipple } from '@material/ripple';
 
 function init() {
-  /*
-  const buttons = document.getElementsByClassName('button-light');
-  for (let idx = 0; idx < buttons.length; idx++) {
-    const btn = buttons[idx];
-    btn.addEventListener('click', () => { setLight(btn); });
-    startRefresh(btn);
-  }
- */
   const render = Component => {
     ReactDOM.render((
 	 <AppContainer>
@@ -20,12 +15,15 @@ function init() {
     ), document.getElementById('root'));
   }
 
-  render(DeviceList);
+  render(App);
 
   // Hot Module Replacement API
   if (module.hot) {
-    module.hot.accept('./components/DeviceList', () => { render(DeviceList) });
+    module.hot.accept('./components/App', () => { render(App) });
   }
+
+  mdcAutoInit.register('MDCRipple', MDCRipple);
+  mdcAutoInit();
 }
 
 document.addEventListener('DOMContentLoaded', init);
