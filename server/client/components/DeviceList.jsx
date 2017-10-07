@@ -9,7 +9,7 @@ const DeviceList = ({devices}) => {
       list = elementsByType[d.type] = [];
     }
     list.push(
-      <li className="mdc-list-item"><Light lightName={d.name} /></li>
+      <li className="mdc-list-item"><Light lightName={d.name} isOn={d.isOn}/></li>
     )
   }
   return (

@@ -1,9 +1,9 @@
 @import "material-components-web/material-components-web";
 
-.button-nav-iotz {
-  padding: 1ex 1ex 1ex 1ex;
+.device-on {
+  @include mdc-button-filled-accessible($mdc-theme-primary)
+}
 
-  .button {
-    font-size: 5vh;
-  }
+.device-off {
+  @include mdc-button-filled-accessible(#cdcdcd)
 }

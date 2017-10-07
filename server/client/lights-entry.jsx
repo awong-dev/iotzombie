@@ -6,6 +6,8 @@ import App from './components/App'
 import mdcAutoInit from '@material/auto-init';
 import { MDCRipple } from '@material/ripple';
 
+require("../sass/style.scss");
+
 function init() {
   const render = Component => {
     ReactDOM.render((

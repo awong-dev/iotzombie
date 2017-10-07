@@ -8,6 +8,7 @@ const store = {
     {
       name: 'Parlor',
       type: 'light',
+      isOn: true,
       id: 1
     },
     {
@@ -18,6 +19,7 @@ const store = {
     {
       name: 'Entry',
       type: 'light',
+      isOn: false,
       id: 2
     }
   ]
