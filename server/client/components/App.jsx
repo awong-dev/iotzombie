@@ -1,36 +1,45 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import update from 'immutability-helper';
 
 import DeviceList from './DeviceList'
 
-const store = {
-  devices: [
-    {
-      name: 'Parlor',
-      type: 'light',
-      isOn: true,
-      id: 1
-    },
-    {
-      name: 'Recirc Pump',
-      type: 'button',
-      id: 2
-    },
-    {
-      name: 'Entry',
-      type: 'light',
-      isOn: false,
-      id: 2
-    }
-  ]
-};
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      devices: [
+        {
+          name: 'Parlor',
+          type: 'light',
+          isOn: true,
+          id: 1
+        },
+        {
+          name: 'Recirc Pump',
+          type: 'button',
+          id: 2
+        },
+        {
+          name: 'Entry',
+          type: 'light',
+          isOn: true,
+          id: 2
+        }
+      ]
+    };
+
+    this.toggleSwitch = this.toggleSwitch.bind(this);
+  }
+
+  toggleSwitch(id) {
+    const foo = update(this.state, {devices: {[id]: {$toggle: ['isOn']}}});
+    this.setState(foo);
+  }
+
   render() {
     return (
-      <Provider store={store}>
-        <DeviceList devices={store.devices}/>
-      </Provider>
+	 <DeviceList devices={this.state.devices} toggleSwitchFunc={this.toggleSwitch}/>
     );
   }
 }

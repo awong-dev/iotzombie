@@ -1,15 +1,21 @@
 import React from 'react';
 import Light from './Light';
 
-const DeviceList = ({devices}) => {
+const DeviceList = ({devices, toggleSwitchFunc}) => {
   const elementsByType = {};
-  for (let d of devices) {
+  for (let i =0; i < devices.length; ++i) {
+    const d = devices[i];
     let list = elementsByType[d.type];
     if (!list) {
       list = elementsByType[d.type] = [];
     }
     list.push(
-      <li className="mdc-list-item"><Light lightName={d.name} isOn={d.isOn}/></li>
+      <li className="mdc-list-item">
+        <Light
+          lightName={d.name}
+          onClick={() => toggleSwitchFunc(i)}
+          isOn={d.isOn}/>
+      </li>
     )
   }
   return (
