@@ -3,8 +3,8 @@ import Light from './Light';
 
 const DeviceList = ({devices, toggleSwitchFunc}) => {
   const elementsByType = {};
-  for (let i =0; i < devices.length; ++i) {
-    const d = devices[i];
+  for (const id in devices) {
+    const d = devices[id];
     let list = elementsByType[d.type];
     if (!list) {
       list = elementsByType[d.type] = [];
@@ -13,7 +13,7 @@ const DeviceList = ({devices, toggleSwitchFunc}) => {
       <li className="mdc-list-item">
         <Light
           lightName={d.name}
-          onClick={() => toggleSwitchFunc(i)}
+          onClick={() => toggleSwitchFunc(id)}
           isOn={d.isOn}/>
       </li>
     )

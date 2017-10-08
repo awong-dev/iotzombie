@@ -1,40 +1,39 @@
-import React from 'react';
-import update from 'immutability-helper';
+import React from 'react'
+import firebase from 'firebase'
+import update from 'immutability-helper'
 
 import DeviceList from './DeviceList'
-
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      devices: [
-        {
-          name: 'Parlor',
-          type: 'light',
-          isOn: true,
-          id: 1
-        },
-        {
-          name: 'Recirc Pump',
-          type: 'button',
-          id: 2
-        },
-        {
-          name: 'Entry',
-          type: 'light',
-          isOn: true,
-          id: 2
-        }
-      ]
-    };
-
+    this.state = { devices: { } };
     this.toggleSwitch = this.toggleSwitch.bind(this);
+    this.devicesDbRef = firebase.database().ref('/devices');
+    this.devicesDbRef.on('value', (snapshot) => {
+      this.setState({devices: snapshot.val()});
+    });
   }
 
   toggleSwitch(id) {
-    const foo = update(this.state, {devices: {[id]: {$toggle: ['isOn']}}});
-    this.setState(foo);
+    this.devicesDbRef.transaction((devices) => {
+      if (devices) {
+        // Avoid racing other UIs.
+        if (devices[id].isOn === this.state.devices[id].isOn) {
+          devices[id].isOn = !devices[id].isOn;
+        }
+      }
+      return devices;
+    });
+  }
+
+  componentDidMount() {
+    this.devicesDbRef.once('value').then(snapshot => {
+      this.setState({devices: snapshot.val()});
+    }).catch(error => {
+      console.error('Error getting state devices', error.message);
+      // TODO(awong): Show error on UI.
+    });
   }
 
   render() {
