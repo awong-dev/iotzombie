@@ -10,9 +10,6 @@ class App extends React.Component {
     this.state = { devices: { } };
     this.toggleSwitch = this.toggleSwitch.bind(this);
     this.devicesDbRef = firebase.database().ref('/devices');
-    this.devicesDbRef.on('value', (snapshot) => {
-      this.setState({devices: snapshot.val()});
-    });
   }
 
   toggleSwitch(id) {
@@ -28,12 +25,13 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    this.devicesDbRef.once('value').then(snapshot => {
-      this.setState({devices: snapshot.val()});
-    }).catch(error => {
-      console.error('Error getting state devices', error.message);
-      // TODO(awong): Show error on UI.
-    });
+    this.devicesDbRef.on('value', (snapshot) => {
+      if (snapshot.val()) {
+        this.setState({devices: snapshot.val()});
+      } else {
+        // TODO(ajwong): Uh oh. Show error.
+      }
+    })
   }
 
   render() {

@@ -1,8 +1,22 @@
 'use strict';
 
-// TODO(awong): this binds the state on the module load this is broken.
-
-const gpio = require('rpi-gpio');
+const isPi = require('detect-rpi');
+if (isPi()) {
+  // rpi-gpio requires rpi.
+  const gpio = require('rpi-gpio');
+} else {
+  if (process.env.NODE_ENV !== 'development') {
+    throw "non-rpi only supported in NODE_ENV=development";
+  }
+  // Mock the sucker.
+  const gpio = {
+    read: (pin, cb) => { cb(null, 1); },
+    write: (pin, val, cb) => { cb(); },
+    setup: (pin, dir, edge, cb) => { if (cb) {cb()} else {edge();} },
+    once: (event, cb) => { cb(); },
+    setMode: (value) => {},
+  };
+}
 const async = require('async');
 
 // GPIO16 (physical pin 36) defaults to pull-down. Low is off on the relay
@@ -49,7 +63,7 @@ module.exports = function (opts) {
     }
   }
 
-function listenForSwitch() {
+  function listenForSwitch() {
     // Interrupts are expressed as 'change' events from Gpio using the
     // EventEmitter interface. Use `once` to implement software debounce.
     // Using 50ms for debounce seems to provide good protection and

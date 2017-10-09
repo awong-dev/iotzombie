@@ -2,15 +2,19 @@
   "name": "iot-zombie",
   "description": "Google cloud functions and firebase implemenation for orchestrating IOT devices",
   "repository": "https://github.com/awong-dev/iotzombie.git",
-  "dependencies": {},
+  "dependencies": {
+    "detect-rpi": "^1.2.0",
+    "firebase-admin": "^5.4.1",
+    "rpi-gpio": "^0.9.1"
+  },
   "scripts": {
-    "firebase": "firebase",
-    "webpack": "webpack --config webpack.config.js",
-    "lint:js": "eslint --quiet --ext .js --ext .jsx client",
     "deploy": "node generate-app-yaml.js && gcloud app deploy app.yaml",
-    "watch": "npm run firebase -- serve --debug --only functions,hosting & npm run watch:client",
-    "watch:client": "BABEL_ENV=hot webpack-dev-server --config webpack-hot.config.js",
-    "test": "mocha --compilers js:babel-register --recursive test/**/*.spec.js -t 30000"
+    "firebase": "firebase",
+    "lint:js": "eslint --quiet --ext .js --ext .jsx client device",
+    "start": "node index.js",
+    "test": "mocha --compilers js:babel-register --recursive test/**/*.spec.js -t 30000",
+    "watch": "NODE_ENV='development' nodemon index.js & BABEL_ENV=hot webpack-dev-server --config webpack-hot.config.js",
+    "webpack": "webpack --config webpack.config.js"
   },
   "author": "Albert J. Wong",
   "license": "BSD-2-Clause",
