@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Light = ({onClick, lightName, lightId, isOn}) => {
+const Switch = ({onClick, lightName, lightId, isOn}) => {
   const classes = `mdc-button mdc-button--unelevated ${isOn ? 'device-on' : 'device-off'}`;
   return (
     <div>
@@ -11,4 +11,4 @@ const Light = ({onClick, lightName, lightId, isOn}) => {
   );
 }
 
-export default Light;
+export default Switch;

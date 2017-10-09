@@ -1,5 +1,5 @@
 import React from 'react';
-import Light from './Light';
+import Switch from './Switch';
 
 const DeviceList = ({devices, toggleSwitchFunc}) => {
   const elementsByType = {};
@@ -11,7 +11,7 @@ const DeviceList = ({devices, toggleSwitchFunc}) => {
     }
     list.push(
       <li className="mdc-list-item">
-        <Light
+        <Switch
           lightName={d.name}
           onClick={() => toggleSwitchFunc(id)}
           isOn={d.isOn}/>
@@ -20,9 +20,9 @@ const DeviceList = ({devices, toggleSwitchFunc}) => {
   }
   return (
     <div class="mdc-list-group">
-      <h3 class="mdc-list-group__subheader">Lights</h3>
+      <h3 class="mdc-list-group__subheader">Switches</h3>
       <ul className="mdc-list">
-        {elementsByType['light']}
+        {elementsByType['switch']}
       </ul>
       <hr class="mdc-list-divider" />
       <h3 class="mdc-list-group__subheader">Buttons</h3>

@@ -14,7 +14,7 @@ const config = {
   entry: { lights: ["./client/lights-entry.jsx"] },
   resolve: { extensions: ['.js', '.jsx'] },
   output: {
-    path: path.join(__dirname, `./build/generated`),
+    path: path.join(__dirname, `./public/generated`),
     publicPath: '/generated/',
     filename: '[name].entry.js'
   },
