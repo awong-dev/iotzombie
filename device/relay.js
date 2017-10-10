@@ -16,7 +16,6 @@ if (isPi()) {
     setup: (pin, dir, edge, cb) => { if (cb) {cb()} else {edge();} },
     once: (event, cb) => { 
       process.once('SIGUSR2', () => {
-        logger.info("hihi");
         cb();
       });
     },

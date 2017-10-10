@@ -26,7 +26,7 @@ if (module === require.main) {
   });
 
   const deviceState = {
-    deviceClock: 3,  // TODO(ajwong): Move to random start.
+    deviceClock: (new Date).getTime(),
     parlor: {
       name: 'Parlor',
       isOn: true,
