@@ -7,14 +7,15 @@ const logger = new (winston.Logger)({
     new (winston.transports.Console)({
       level:            'info',
       handleExceptions: true,
+      prettyPrint: (object) => JSON.stringify(object, null, 2),
       json:             false,
-      colorize:         false,
-      timestamp: false
+      colorize:         true,
+      timestamp: true
     })
   ]
 });
 
-const updateRelay = require('./device/update-relay.js')({logger});
+const {setupRelay, setRelayState} = require('./device/relay.js')({logger});
 
 if (module === require.main) {
   const serviceAccount = require("./serviceAccountKey.json");
@@ -43,12 +44,13 @@ if (module === require.main) {
     },
   };
 
-  const logDelta = (oldState, newState) => {
-    logger.info("Old state: ", oldState, "New State: ", newState);
+  const updateParlor = (oldState, newState) => {
+    setRelayState(newState);
   }
+
   const deviceFunctions = {
-    parlor: logDelta,
-    entry: logDelta,
+    parlor: updateParlor,
+    entry: null,
     recirc: null,
   };
 
@@ -56,24 +58,28 @@ if (module === require.main) {
   devicesDbRef.on('value', (snapshot) => {
     const serverDeviceState = snapshot.val();
     if (serverDeviceState) {
-      logger.info(JSON.stringify(serverDeviceState, null, 2));
       // Device state ALWAYS wins. If the device clock is out of sync,
       // then drop the server update and overwrite it with our data.
       if (serverDeviceState.deviceClock !== deviceState.deviceClock) {
         devicesDbRef.set(deviceState);
       } else {
+        // For each device, check if there's a change and if yes, then push
+        // an update.
         for (const deviceId in serverDeviceState) {
           const deviceFunc = deviceFunctions[deviceId];
           if (deviceFunc) {
-            deviceFunc(deviceState[deviceId], serverDeviceState[deviceId]);
+            deviceFunc(deviceState[deviceId].isOn, serverDeviceState[deviceId].isOn);
           }
+          deviceState[deviceId].isOn = serverDeviceState[deviceId].isOn;
         }
-        // for each device, check if there's a change and if yes, then push
-        // an update.
-        //
-        // Only ever update the state.
-        Object.assign(deviceState, serverDeviceState);
       }
     }
+  });
+
+  // setupRelay() takes a function that is called on toggle.
+  setupRelay(() => {
+    deviceState.deviceClock++;
+    deviceState.parlor.isOn = !deviceState.parlor.isOn;
+    devicesDbRef.set(deviceState);
   });
 }
