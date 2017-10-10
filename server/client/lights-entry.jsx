@@ -2,10 +2,10 @@ import App from './components/App'
 import React from 'react';
 import ReactDOM from 'react-dom'
 import firebase from 'firebase'
-import { AppContainer } from 'react-hot-loader'
 
-import mdcAutoInit from '@material/auto-init';
-import { MDCRipple } from '@material/ripple';
+if (process.env.NODE_ENV === 'development') {
+  const { AppContainer } = require('react-hot-loader');
+}
 
 require("../sass/style.scss");
 
@@ -22,19 +22,25 @@ function initFirebase() {
 }
 
 function initReact() {
-  const render = Component => {
+  if (process.env.NODE_ENV === 'development') {
+    const render = Component => {
+      ReactDOM.render((
+        <AppContainer>
+          <Component />
+        </AppContainer>
+      ), document.getElementById('root'));
+    }
+
+    render(App);
+
+    // Hot Module Replacement API
+    if (module.hot) {
+      module.hot.accept('./components/App', () => { render(App) });
+    }
+  } else {
     ReactDOM.render((
-	 <AppContainer>
-	   <Component />
-	 </AppContainer>
+      <App />
     ), document.getElementById('root'));
-  }
-
-  render(App);
-
-  // Hot Module Replacement API
-  if (module.hot) {
-    module.hot.accept('./components/App', () => { render(App) });
   }
 }
 
@@ -51,8 +57,6 @@ function init() {
   });
 
   initReact();
-  mdcAutoInit.register('MDCRipple', MDCRipple);
-  mdcAutoInit();
 }
 
 document.addEventListener('DOMContentLoaded', init);

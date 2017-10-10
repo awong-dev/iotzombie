@@ -42,7 +42,8 @@ const config = {
 		loader: 'babel-loader',
 		options: {
 		  // Also see .babelrc
-		  cacheDirectory: '.babelcache'
+		  cacheDirectory: '.babelcache',
+            presets: ['env']
 		}
 	   }
 	 }
@@ -63,9 +64,7 @@ if (isDevelopment) {
   config.devtool = '#eval-source-map';
 } else {
   config.devtool = '#source-map';
-  config.plugins.push(new webpack.optimize.DedupePlugin());
-  config.plugins.push(new webpack.optimize.OccurrenceOrderPlugin(true));
-  config.plugins.push(new webpack.optimize.UglifyJsPlugin());
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin({sourceMap: true}));
 }
 
 module.exports = config;

@@ -8,13 +8,13 @@
     "rpi-gpio": "^0.9.1"
   },
   "scripts": {
-    "deploy": "node generate-app-yaml.js && gcloud app deploy app.yaml",
+    "deploy": "webpack && firebase deploy",
     "firebase": "firebase",
     "lint:js": "eslint --quiet --ext .js --ext .jsx client device",
     "start": "node index.js",
     "test": "mocha --compilers js:babel-register --recursive test/**/*.spec.js -t 30000",
     "watch": "NODE_ENV='development' nodemon index.js & BABEL_ENV=hot webpack-dev-server --config webpack-hot.config.js",
-    "webpack": "webpack --config webpack.config.js"
+    "webpack": "NODE_ENV='production' webpack -p --config webpack.config.js"
   },
   "author": "Albert J. Wong",
   "license": "BSD-2-Clause",
