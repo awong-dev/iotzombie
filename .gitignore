@@ -1,5 +1,8 @@
-node_modules
 .babelcache
+node_modules
+
+serviceAccountKey.json
+public/generated
 
 *.log
 *.sw[op]

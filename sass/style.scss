@@ -1,0 +1,9 @@
+@import "material-components-web/material-components-web";
+
+.device-on {
+  @include mdc-button-filled-accessible($mdc-theme-primary)
+}
+
+.device-off {
+  @include mdc-button-filled-accessible(#cdcdcd)
+}

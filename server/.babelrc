@@ -1,6 +1,0 @@
-{
-  // Javascript settings.
-  "presets": [
-    "es2015"
-  ]
-}
