@@ -18,7 +18,7 @@ const logger = new (winston.Logger)({
 const {setupRelay, setRelayState} = require('./device/relay.js')({logger});
 
 if (module === require.main) {
-  const serviceAccount = require("./serviceAccountKey.json");
+  const serviceAccount = require(process.env.SERVICE_ACCOUNT_KEY || './serviceAccountKey.json');
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
