@@ -31,16 +31,19 @@ if (module === require.main) {
       name: 'Parlor',
       isOn: true,
       type: 'switch',
+      icon: 'lightbulb_outline',
     },
     entry: {
       name: 'Entry',
       isOn: true,
       type: 'switch',
+      icon: 'lightbulb_outline',
     },
     recirc: {
       name: 'Recirc Pump',
       isOn: false,
       type: 'button',
+      icon: 'repeat',
     },
   };
 

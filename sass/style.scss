@@ -1,9 +1,33 @@
+$mdc-theme-primary: #bdbdbd;
+$mdc-theme-secondary: #0277bd;
+
 @import "material-components-web/material-components-web";
 
+.device-list {
+  --mdc-theme-text-primary-on-primary: var(--mdc-theme-text-primary-on-dark);
+}
+
+.device-list-header {
+  @include mdc-typography('title')
+  text-align: center;
+  width: 100%;
+  display: inline-block;
+}
+
+.device-entry {
+  width: 100%;
+  margin: 0.1ex;
+}
+
+.device-entry-icon {
+  display: inline;
+  vertical-align: middle;
+}
+
 .device-on {
-  @include mdc-button-filled-accessible($mdc-theme-primary)
+  @include mdc-button-filled-accessible($mdc-theme-secondary)
 }
 
 .device-off {
-  @include mdc-button-filled-accessible(#cdcdcd)
+  @include mdc-button-filled-accessible($mdc-theme-primary-dark)
 }

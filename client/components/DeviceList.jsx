@@ -10,25 +10,30 @@ const DeviceList = ({devices, toggleSwitchFunc}) => {
       list = elementsByType[d.type] = [];
     }
     list.push(
-      <li className="mdc-list-item">
+      <li className="mdc-list-item" width="100%">
         <Switch
           lightName={d.name}
           onClick={() => toggleSwitchFunc(id)}
+          icon={d.icon}
           isOn={d.isOn}/>
       </li>
     )
   }
   return (
-    <div class="mdc-list-group">
-      <h3 class="mdc-list-group__subheader">Switches</h3>
-      <ul className="mdc-list">
-        {elementsByType['switch']}
-      </ul>
+    <div class="device-list">
+      <section class="mdc-list-group mdc-theme--primary-bg">
+        <h3 class="device-list-header">Switches</h3>
+        <ul className="mdc-list">
+          {elementsByType['switch']}
+        </ul>
+      </section>
       <hr class="mdc-list-divider" />
-      <h3 class="mdc-list-group__subheader">Buttons</h3>
-      <ul className="mdc-list">
-        {elementsByType['button']}
-      </ul>
+      <section class="mdc-list-group mdc-theme--primary-bg">
+        <h3 class="device-list-header">Buttons</h3>
+        <ul className="mdc-list">
+          {elementsByType['button']}
+        </ul>
+      </section>
     </div>
   );
 }
