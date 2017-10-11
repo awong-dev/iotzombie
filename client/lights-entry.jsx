@@ -3,6 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import firebase from 'firebase'
 
+import mdcAutoInit from '@material/auto-init';
+
 if (process.env.NODE_ENV === 'development') {
   const { AppContainer } = require('react-hot-loader');
 }
@@ -57,6 +59,7 @@ function init() {
   });
 
   initReact();
+  window.mdc.autoInit();
 }
 
 document.addEventListener('DOMContentLoaded', init);
