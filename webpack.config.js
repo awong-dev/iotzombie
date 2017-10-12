@@ -2,7 +2,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 const glob = require('glob');
 const webpack = require('webpack');
-const _ = require('lodash');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -37,7 +36,10 @@ const config = {
       },
 	 {
 	   test: /\.jsx?$/,
-	   exclude: /node_modules/,
+        include: [
+          path.resolve(__dirname, 'client'),
+          path.resolve(__dirname, 'node_modules/@material')
+        ],
 	   use: {
 		loader: 'babel-loader',
 		options: {

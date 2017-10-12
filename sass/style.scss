@@ -1,7 +1,10 @@
 $mdc-theme-primary: #bdbdbd;
 $mdc-theme-secondary: #0277bd;
 
-@import "material-components-web/material-components-web";
+@import "@material/button/mdc-button";
+@import "@material/list/mdc-list";
+@import "@material/theme/mdc-theme";
+@import "@material/typography/mdc-typography";
 
 .device-list {
   --mdc-theme-text-primary-on-primary: var(--mdc-theme-text-primary-on-dark);
@@ -22,6 +25,10 @@ $mdc-theme-secondary: #0277bd;
 .device-entry-icon {
   display: inline;
   vertical-align: middle;
+}
+
+.momentary-button {
+  @include mdc-button-filled-accessible($mdc-theme-secondary-dark)
 }
 
 .device-on {

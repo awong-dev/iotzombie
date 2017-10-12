@@ -1,4 +1,6 @@
 import React from 'react';
+
+import MomentaryButton from './MomentaryButton';
 import Switch from './Switch';
 
 const DeviceList = ({devices, toggleSwitchFunc}) => {
@@ -9,15 +11,26 @@ const DeviceList = ({devices, toggleSwitchFunc}) => {
     if (!list) {
       list = elementsByType[d.type] = [];
     }
-    list.push(
-      <li className="mdc-list-item" width="100%">
-        <Switch
-          lightName={d.name}
-          onClick={() => toggleSwitchFunc(id)}
-          icon={d.icon}
-          isOn={d.isOn}/>
-      </li>
-    )
+    if (d.type === 'switch') {
+      list.push(
+        <li className="mdc-list-item" width="100%">
+          <Switch
+            name={d.name}
+            onClick={() => toggleSwitchFunc(id)}
+            icon={d.icon}
+            isOn={d.isOn}/>
+        </li>
+      );
+    } else {
+      list.push(
+        <li className="mdc-list-item" width="100%">
+          <MomentaryButton
+            name={d.name}
+            onClick={() => toggleSwitchFunc(id)}
+            icon={d.icon}/>
+        </li>
+      );
+    }
   }
   return (
     <div class="device-list">

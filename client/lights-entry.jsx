@@ -3,8 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import firebase from 'firebase'
 
-import mdcAutoInit from '@material/auto-init';
-
 if (process.env.NODE_ENV === 'development') {
   const { AppContainer } = require('react-hot-loader');
 }
@@ -24,11 +22,12 @@ function initFirebase() {
 }
 
 function initReact() {
+  const devicesDbRef = firebase.database().ref('/devices');
   if (process.env.NODE_ENV === 'development') {
     const render = Component => {
       ReactDOM.render((
         <AppContainer>
-          <Component />
+          <Component devicesDbRef={devicesDbRef}/>
         </AppContainer>
       ), document.getElementById('root'));
     }
@@ -41,7 +40,7 @@ function initReact() {
     }
   } else {
     ReactDOM.render((
-      <App />
+      <App devicesDbRef={devicesDbRef}/>
     ), document.getElementById('root'));
   }
 }
@@ -59,7 +58,6 @@ function init() {
   });
 
   initReact();
-  window.mdc.autoInit();
 }
 
 document.addEventListener('DOMContentLoaded', init);

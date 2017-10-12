@@ -8,12 +8,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { devices: { } };
+    this.onDbChange = this.onDbChange.bind(this);
     this.toggleSwitch = this.toggleSwitch.bind(this);
-    this.devicesDbRef = firebase.database().ref('/devices');
   }
 
   toggleSwitch(id) {
-    this.devicesDbRef.transaction((devices) => {
+    this.props.devicesDbRef.transaction((devices) => {
       if (devices) {
         // Avoid racing other UIs.
         if (devices[id].isOn === this.state.devices[id].isOn) {
@@ -24,14 +24,20 @@ class App extends React.Component {
     });
   }
 
+  onDbChange(snapshot) {
+    if (snapshot.val()) {
+      this.setState({devices: snapshot.val()});
+    } else {
+      // TODO(ajwong): Uh oh. Show error.
+    }
+  }
+
   componentDidMount() {
-    this.devicesDbRef.on('value', (snapshot) => {
-      if (snapshot.val()) {
-        this.setState({devices: snapshot.val()});
-      } else {
-        // TODO(ajwong): Uh oh. Show error.
-      }
-    })
+    this.props.devicesDbRef.on('value', this.onDbChange);
+  }
+
+  componentWillUnmount() {
+    this.props.devicesDbRef.off('value', this.onDbChange);
   }
 
   render() {
