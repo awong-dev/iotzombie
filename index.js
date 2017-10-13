@@ -1,5 +1,4 @@
 const admin = require("firebase-admin");
-const firebase = require('firebase');
 const winston = require('winston');
 
 const logger = new (winston.Logger)({
