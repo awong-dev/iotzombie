@@ -3,6 +3,7 @@
   "description": "Google cloud functions and firebase implemenation for orchestrating IOT devices",
   "repository": "https://github.com/awong-dev/iotzombie.git",
   "dependencies": {
+    "async": "https://registry.npmjs.org/async/-/async-2.5.0.tgz",
     "detect-rpi": "^1.2.0",
     "firebase-admin": "^5.4.1",
     "rpi-gpio": "https://registry.npmjs.org/rpi-gpio/-/rpi-gpio-0.9.1.tgz",
