@@ -10,7 +10,7 @@
     "winston": "https://registry.npmjs.org/winston/-/winston-1.1.2.tgz"
   },
   "scripts": {
-    "deploy": "webpack && firebase deploy",
+    "deploy": "npm run webpack && firebase deploy",
     "firebase": "firebase",
     "lint:js": "eslint --quiet --ext .js --ext .jsx client device",
     "start": "node index.js",
