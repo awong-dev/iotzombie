@@ -28,13 +28,13 @@ if (module === require.main) {
     deviceClock: (new Date).getTime(),
     parlor: {
       name: 'Parlor',
-      isOn: true,
+      isOn: false,
       type: 'switch',
       icon: 'lightbulb_outline',
     },
     entry: {
       name: 'Entry',
-      isOn: true,
+      isOn: false,
       type: 'switch',
       icon: 'lightbulb_outline',
     },
@@ -64,11 +64,9 @@ if (module === require.main) {
     if (serverDeviceState) {
       // Device state ALWAYS wins. If the device clock is out of sync,
       // then drop the server update.
-      //
-      // TODO(awong): Something wrong here.
       if (serverDeviceState.deviceClock !== deviceState.deviceClock) {
         logger.info(`Server had outdated deviceClock. Server: ${serverDeviceState.deviceClock}. Local: ${deviceState.deviceClock}`);
-//        devicesDbRef.set(deviceState);
+        devicesDbRef.set(deviceState);
       } else {
         logger.info('Received Server update.');
         // For each device, check if there's a change and if yes, then push

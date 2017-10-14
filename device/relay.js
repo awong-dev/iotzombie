@@ -40,12 +40,14 @@ module.exports = function (opts) {
   function listenForSwitch(onTriggerFunc) {
     // Interrupts are expressed as 'change' events from Gpio using the
     // EventEmitter interface. Use `once` to implement software debounce
-    // by deregistering the listener after the first transition for 50ms.
-    // Using 50ms for debounce seems to provide good protection and
+    // by deregistering the listener after the first transition for 80ms.
+    // Using 80ms for debounce seems to provide good protection and
     // responsiveness.
     gpio.once('change', () => {
       // Unconditionally call self to debounce.
-      setTimeout(() => { listenForSwitch(onTriggerFunc); }, 50);
+      setTimeout(() => {
+        logger.info("Rescheduled after debounce.");
+        listenForSwitch(onTriggerFunc); }, 50);
 
       // Read switch and respond.
       gpio.read(lightSwitchGpio, (err, value) => {
@@ -54,8 +56,8 @@ module.exports = function (opts) {
           return;
         }
 
-        // Only respond to button events.
-        if (value) {
+        // Only respond to button down events. Button goes to ground.
+        if (value === false) {
           onTriggerFunc();
         }
       });
