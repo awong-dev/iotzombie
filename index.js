@@ -47,7 +47,9 @@ if (module === require.main) {
   };
 
   const updateParlor = (oldState, newState) => {
-    setRelayState(newState);
+    if (oldState !== newState) {
+      setRelayState(newState);
+    }
   }
 
   const deviceFunctions = {
@@ -61,10 +63,14 @@ if (module === require.main) {
     const serverDeviceState = snapshot.val();
     if (serverDeviceState) {
       // Device state ALWAYS wins. If the device clock is out of sync,
-      // then drop the server update and overwrite it with our data.
+      // then drop the server update.
+      //
+      // TODO(awong): Something wrong here.
       if (serverDeviceState.deviceClock !== deviceState.deviceClock) {
-        devicesDbRef.set(deviceState);
+        logger.info(`Server had outdated deviceClock. Server: ${serverDeviceState.deviceClock}. Local: ${deviceState.deviceClock}`);
+//        devicesDbRef.set(deviceState);
       } else {
+        logger.info('Received Server update.');
         // For each device, check if there's a change and if yes, then push
         // an update.
         for (const deviceId in serverDeviceState) {
@@ -79,9 +85,12 @@ if (module === require.main) {
   });
 
   // setupRelay() takes a function that is called on toggle.
-  setupRelay(() => {
-    deviceState.deviceClock++;
+  setupRelay(deviceState.parlor.isOn, () => {
+    const oldState = deviceState.parlor.isOn
     deviceState.parlor.isOn = !deviceState.parlor.isOn;
+    logger.info(`Local switch triggered: ${oldState} -> ${deviceState.parlor.isOn}`);
+    deviceState.deviceClock++;
+    setRelayState(deviceState.parlor.isOn);
     devicesDbRef.set(deviceState);
   });
 }

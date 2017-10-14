@@ -72,13 +72,15 @@ module.exports = function (opts) {
       );
   }
 
-  function setupRelay(onTriggerFunc) {
+  function setupRelay(initialState, onTriggerFunc) {
     setupGpio((err) => {
       if (err) {
         logger.error('setup error', err);
         return;
       }
 
+      logger.info(`Setting light to initial state ${initialState}`);
+      setRelayState(initialState);
       listenForSwitch(onTriggerFunc);
     });
   }
