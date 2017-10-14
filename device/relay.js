@@ -46,7 +46,7 @@ module.exports = function (opts) {
     gpio.once('change', () => {
       // Unconditionally call self to debounce.
       setTimeout(() => {
-        logger.debug("Rescheduled after debounce.");
+        logger.info("Rescheduled after debounce.");
         listenForSwitch(onTriggerFunc); }, 50);
 
       // Read switch and respond.
