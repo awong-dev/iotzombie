@@ -1,5 +1,6 @@
 const admin = require("firebase-admin");
 const winston = require('winston');
+const express = require('express');
 
 const logger = new (winston.Logger)({
   transports: [
@@ -18,6 +19,23 @@ const {setupRelay, setRelayState} = require('./device/relay.js')({logger});
 
 if (module === require.main) {
   const serviceAccount = require(process.env.SERVICE_ACCOUNT_KEY || './serviceAccountKey.json');
+
+  function createZwayWebhook() {
+    const app = express();
+    app.get('/zwayhook/action/on', (req, res) => {
+      logger.info("zwayhook set to on on");
+      res.send("on");
+    });
+    app.get('/zwayhook/action/off', (req, res) => {
+      logger.info("zwayhook set to off");
+      res.send("off");
+    });
+    app.get('/zwayhook/get/value', (req, res) => {
+      logger.info("zwayhook value requested");
+      res.send("off");
+    });
+    return app;
+  }
 
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -92,4 +110,8 @@ if (module === require.main) {
     setRelayState(deviceState.parlor.isOn);
     devicesDbRef.set(deviceState);
   });
+
+  const zwayWebhook = createZwayWebhook().listen(1173 /* "lite" */, '127.0.0.1', () => {
+    logger.info(`Listenting on ${zwayWebhook.address().address}:${zwayWebhook.address().port}`);
+  })
 }
