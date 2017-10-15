@@ -64,7 +64,7 @@ if (module === require.main) {
   const updateZWay = (oldState, newState, id) => {
     if (oldState !== newState) {
       axios.get(`${zWayDevApiBase}/${zWayIds[id]}/command/${newState ? 'on' : 'off'}`);
-        .catch(err => logger.error(err));
+        .catch(err => logger.error(`Failed set state ${newState} for ZWay ${id}`, err));
     }
   }
 
@@ -114,14 +114,17 @@ if (module === require.main) {
       axios.get(`${zWayDevApiBase}/${zWayIds[id]}`)
         .then(response => {
           if (deviceState[id]) {
-            if (deviceState[id].isOn !== (response.data.data.metrics.level === 'on')) {
+            const newState = response.data.data.metrics.level === 'on';
+            logger.info(`Found state for ${id}: ${newState} [raw: ${response.data.data.metrics.level}]`);
+            if (deviceState[id].isOn !== newState) {
+              logger.info(`Updating ${id}`);
               deviceState.deviceClock++;
-              deviceState[id].isOn = (response.data.data.metrics.level === 'on')
+              deviceState[id].isOn = newState;
               devicesDbRef.set(deviceState);
             }
           }
         })
-        .catch(err => logger.error(err));
+        .catch(err => logger.error(`Failed get status for ZWay ${id}`, err));
     }
   }
 
