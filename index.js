@@ -103,7 +103,7 @@ if (module === require.main) {
     };
 
     for (const id in zWayIds) {
-      axios.get(`http://127.0.0.1:8083/ZAutomation/api/v1/devices/${id}`)
+      axios.get(`http://127.0.0.1:8083/ZAutomation/api/v1/devices/${zWayIds[id]}`)
         .then(response => {
           if (deviceState[id]) {
             if (deviceState[id].isOn !== (response.data.data.metrics.level === 'on')) {
@@ -113,9 +113,7 @@ if (module === require.main) {
             }
           }
         })
-        .catch(err => {
-          logger.error(err);
-        });
+        .catch(err => { logger.error(err); });
     }
   }
 
