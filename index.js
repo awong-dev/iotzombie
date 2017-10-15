@@ -16,6 +16,13 @@ const logger = new (winston.Logger)({
   ]
 });
 
+// These are hardcoded values from the zwave network.
+const zWayIds = {
+  backporch: 'ZWayVDev_zway_2-0-37',
+  recirc: 'ZWayVDev_zway_3-0-37',
+};
+const zWayDevApiBase = 'http://127.0.0.1:8083/ZAutomation/api/v1/devices'
+
 const {setupRelay, setRelayState} = require('./device/relay.js')({logger});
 
 if (module === require.main) {
@@ -54,10 +61,17 @@ if (module === require.main) {
     }
   }
 
+  const updateZWay = (oldState, newState, id) => {
+    if (oldState !== newState) {
+      axios.get(`${zWayDevApiBase}/${zWayIds[id]}/command/${newState ? 'on' : 'off'}`);
+        .catch(err => logger.error(err));
+    }
+  }
+
   const deviceFunctions = {
     parlor: updateParlor,
-    entry: null,
-    recirc: null,
+    backporch: updateZWay,
+    recirc: updateZWay,
   };
 
   const devicesDbRef = admin.database().ref(
@@ -77,7 +91,7 @@ if (module === require.main) {
         for (const deviceId in serverDeviceState) {
           const deviceFunc = deviceFunctions[deviceId];
           if (deviceFunc) {
-            deviceFunc(deviceState[deviceId].isOn, serverDeviceState[deviceId].isOn);
+            deviceFunc(deviceState[deviceId].isOn, serverDeviceState[deviceId].isOn, deviceId);
           }
           deviceState[deviceId].isOn = serverDeviceState[deviceId].isOn;
         }
@@ -96,14 +110,8 @@ if (module === require.main) {
   });
 
   function updateZwayState() {
-    // These are hardcoded values from the zwave network.
-    const zWayIds = {
-      backporch: 'ZWayVDev_zway_2-0-37',
-      recirc: 'ZWayVDev_zway_3-0-37',
-    };
-
     for (const id in zWayIds) {
-      axios.get(`http://127.0.0.1:8083/ZAutomation/api/v1/devices/${zWayIds[id]}`)
+      axios.get(`${zWayDevApiBase}/${zWayIds[id]}`)
         .then(response => {
           if (deviceState[id]) {
             if (deviceState[id].isOn !== (response.data.data.metrics.level === 'on')) {
@@ -113,7 +121,7 @@ if (module === require.main) {
             }
           }
         })
-        .catch(err => { logger.error(err); });
+        .catch(err => logger.error(err));
     }
   }
 
