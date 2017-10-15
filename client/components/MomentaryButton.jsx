@@ -13,7 +13,7 @@ class MomentaryButton extends React.Component {
         className="mdc-button mdc-button--unelevated mdc-ripple-surface device-entry momentary-button"
         onClick={this.props.onClick}
         data-mdc-auto-init="MDCRipple">
-        <i class="material-icons device-entry-icon">{this.props.icon}</i> {this.props.name}
+        <i className="material-icons device-entry-icon">{this.props.icon}</i> {this.props.name}
       </button>
     );
   }

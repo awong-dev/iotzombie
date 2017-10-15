@@ -3,10 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import firebase from 'firebase'
 
-if (process.env.NODE_ENV === 'development') {
-  const { AppContainer } = require('react-hot-loader');
-}
-
 require("../sass/style.scss");
 
 function initFirebase() {
@@ -22,8 +18,9 @@ function initFirebase() {
 }
 
 function initReact() {
-  const devicesDbRef = firebase.database().ref('/devices');
   if (process.env.NODE_ENV === 'development') {
+    const { AppContainer } = require('react-hot-loader');
+    const devicesDbRef = firebase.database().ref('/devicesdev');
     const render = Component => {
       ReactDOM.render((
         <AppContainer>
@@ -39,6 +36,7 @@ function initReact() {
       module.hot.accept('./components/App', () => { render(App) });
     }
   } else {
+    const devicesDbRef = firebase.database().ref('/devices');
     ReactDOM.render((
       <App devicesDbRef={devicesDbRef}/>
     ), document.getElementById('root'));

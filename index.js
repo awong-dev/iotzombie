@@ -58,7 +58,8 @@ if (module === require.main) {
     recirc: null,
   };
 
-  const devicesDbRef = admin.database().ref('/devices');
+  const devicesDbRef = admin.database().ref(
+    process.env.NODE_ENV === 'production' ? '/devices' : '/devicesdev');
   devicesDbRef.on('value', (snapshot) => {
     const serverDeviceState = snapshot.val();
     if (serverDeviceState) {

@@ -11,28 +11,27 @@ const DeviceList = ({devices, toggleSwitchFunc}) => {
     if (!list) {
       list = elementsByType[d.type] = [];
     }
+    let element = null;
     if (d.type === 'switch') {
-      list.push(
-        <li className="mdc-list-item" width="100%">
-          <Switch
-            key={id}
-            name={d.name}
-            onClick={() => toggleSwitchFunc(id)}
-            icon={d.icon}
-            isOn={d.isOn}/>
-        </li>
+      element = (
+        <Switch
+          name={d.name}
+          onClick={() => toggleSwitchFunc(id)}
+          icon={d.icon}
+          isOn={d.isOn}/>
       );
     } else {
-      list.push(
-        <li className="mdc-list-item" width="100%">
-          <MomentaryButton
-            key={id}
-            name={d.name}
-            onClick={() => toggleSwitchFunc(id)}
-            icon={d.icon}/>
-        </li>
+      element = (
+        <MomentaryButton
+          name={d.name}
+          onClick={() => toggleSwitchFunc(id)}
+          icon={d.icon}/>
       );
     }
+    list.push(
+      <li key={id} className="mdc-list-item" width="100%">
+        {element}
+      </li>);
   }
   return (
     <div className="device-list">
