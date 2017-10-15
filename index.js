@@ -1,6 +1,7 @@
 const admin = require("firebase-admin");
 const winston = require('winston');
 const express = require('express');
+const axios = require('axios');
 
 const logger = new (winston.Logger)({
   transports: [
@@ -20,23 +21,6 @@ const {setupRelay, setRelayState} = require('./device/relay.js')({logger});
 if (module === require.main) {
   const serviceAccount = require(process.env.SERVICE_ACCOUNT_KEY || './serviceAccountKey.json');
 
-  function createZwayWebhook() {
-    const app = express();
-    app.get('/zwayhook/action/on', (req, res) => {
-      logger.info("zwayhook set to on on");
-      res.send("on");
-    });
-    app.get('/zwayhook/action/off', (req, res) => {
-      logger.info("zwayhook set to off");
-      res.send("off");
-    });
-    app.get('/zwayhook/get/value', (req, res) => {
-      logger.info("zwayhook value requested");
-      res.send("off");
-    });
-    return app;
-  }
-
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
     databaseURL: "https://iotzombie-153122.firebaseio.com"
@@ -50,8 +34,8 @@ if (module === require.main) {
       type: 'switch',
       icon: 'lightbulb_outline',
     },
-    entry: {
-      name: 'Entry',
+    backporch: {
+      name: 'Back Porch',
       isOn: false,
       type: 'switch',
       icon: 'lightbulb_outline',
@@ -110,6 +94,49 @@ if (module === require.main) {
     setRelayState(deviceState.parlor.isOn);
     devicesDbRef.set(deviceState);
   });
+
+  function updateZwayState() {
+    // These are hardcoded values from the zwave network.
+    const zWayIds = {
+      backporch: 'ZWayVDev_zway_2-0-37',
+      recirc: 'ZWayVDev_zway_3-0-37',
+    };
+
+    for (const id in zWayIds) {
+      axios.get(`http://127.0.0.1:8083/ZAutomation/api/v1/devices/${id}`)
+        .then(response => {
+          if (deviceState[id]) {
+            if (deviceState[id].isOn !== (response.data.data.metrics.level === 'on')) {
+              deviceState.deviceClock++;
+              deviceState[id].isOn = (response.data.data.metrics.level === 'on')
+              devicesDbRef.set(deviceState);
+            }
+          }
+        })
+        .catch(err => {
+          logger.error(err);
+        });
+    }
+  }
+
+  function createZwayWebhook() {
+    const app = express();
+    app.get('/zwayhook/action/on', (req, res) => {
+      updateZwayState();
+      logger.info("zwayhook on received");
+      res.send("on");
+    });
+    app.get('/zwayhook/action/off', (req, res) => {
+      updateZwayState();
+      logger.info("zwayhook off received");
+      res.send("off");
+    });
+    app.get('/zwayhook/get/value', (req, res) => {
+      logger.info("zwayhook value requested. This shouldn't happen...'");
+      res.send("off");
+    });
+    return app;
+  }
 
   const zwayWebhook = createZwayWebhook().listen(1173 /* "lite" */, '127.0.0.1', () => {
     logger.info(`Listenting on ${zwayWebhook.address().address}:${zwayWebhook.address().port}`);
