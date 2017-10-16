@@ -20,6 +20,8 @@ const logger = new (winston.Logger)({
 const zWayIds = {
   backporch: 'ZWayVDev_zway_2-0-37',
   recirc: 'ZWayVDev_zway_3-0-37',
+  entry: 'ZWayVDev_zway_16-1-37',
+  frontporch: 'ZWayVDev_zway_16-2-37',
 };
 const zWayDevApiBase = 'http://127.0.0.1:8083/ZAutomation/api/v1/devices'
 
@@ -47,6 +49,18 @@ if (module === require.main) {
       type: 'switch',
       icon: 'lightbulb_outline',
     },
+    entry: {
+      name: 'Entry',
+      isOn: false,
+      type: 'switch',
+      icon: 'lightbulb_outline',
+    },
+    frontporch: {
+      name: 'Front Porch',
+      isOn: false,
+      type: 'switch',
+      icon: 'lightbulb_outline',
+    },
     recirc: {
       name: 'Recirc Pump',
       isOn: false,
@@ -69,8 +83,10 @@ if (module === require.main) {
   }
 
   const deviceFunctions = {
-    parlor: updateParlor,
     backporch: updateZWay,
+    entry: updateZWay,
+    frontporch: updateZWay,
+    parlor: updateParlor,
     recirc: updateZWay,
   };
 
@@ -109,7 +125,7 @@ if (module === require.main) {
     devicesDbRef.set(deviceState);
   });
 
-  function updateZwayState() {
+  function updateZWayState() {
     for (const id in zWayIds) {
       axios.get(`${zWayDevApiBase}/${zWayIds[id]}`)
         .then(response => {
@@ -128,15 +144,15 @@ if (module === require.main) {
     }
   }
 
-  function createZwayWebhook() {
+  function createZWayWebhook() {
     const app = express();
     app.get('/zwayhook/action/on', (req, res) => {
-      updateZwayState();
+      updateZWayState();
       logger.info("zwayhook on received");
       res.send("on");
     });
     app.get('/zwayhook/action/off', (req, res) => {
-      updateZwayState();
+      updateZWayState();
       logger.info("zwayhook off received");
       res.send("off");
     });
@@ -147,7 +163,7 @@ if (module === require.main) {
     return app;
   }
 
-  const zwayWebhook = createZwayWebhook().listen(1173 /* "lite" */, '127.0.0.1', () => {
+  const zwayWebhook = createZWayWebhook().listen(1173 /* "lite" */, '127.0.0.1', () => {
     logger.info(`Listenting on ${zwayWebhook.address().address}:${zwayWebhook.address().port}`);
   })
 }
