@@ -77,8 +77,11 @@ if (module === require.main) {
 
   const updateZWay = (oldState, newState, id) => {
     if (oldState !== newState) {
-      axios.get(`${zWayDevApiBase}/${zWayIds[id]}/command/${newState ? 'on' : 'off'}`)
-        .catch(err => logger.error(`Failed set state ${newState} for ZWay ${id}`, err));
+      const cmdUrl = `${zWayDevApiBase}/${zWayIds[id]}/command/${newState ? 'on' : 'off'}`;
+      axios.get(cmdUrl)
+        .catch(err => {
+          logger.error(`Failed set state ${newState} for ZWay ${id}: ${cmdUrl}`, err)
+        });
     }
   }
 
