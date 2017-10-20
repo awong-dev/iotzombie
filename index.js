@@ -20,8 +20,6 @@ const logger = new (winston.Logger)({
 const zWayIds = {
   backporch: 'ZWayVDev_zway_2-0-37',
   recirc: 'ZWayVDev_zway_3-0-37',
-  entry: 'ZWayVDev_zway_16-1-37',
-  frontporch: 'ZWayVDev_zway_16-2-37',
 };
 const zWayDevApiBase = 'http://127.0.0.1:8083/ZAutomation/api/v1/devices'
 
@@ -45,18 +43,6 @@ if (module === require.main) {
     },
     backporch: {
       name: 'Back Porch',
-      isOn: false,
-      type: 'switch',
-      icon: 'lightbulb_outline',
-    },
-    entry: {
-      name: 'Entry',
-      isOn: false,
-      type: 'switch',
-      icon: 'lightbulb_outline',
-    },
-    frontporch: {
-      name: 'Front Porch',
       isOn: false,
       type: 'switch',
       icon: 'lightbulb_outline',
@@ -87,8 +73,6 @@ if (module === require.main) {
 
   const deviceFunctions = {
     backporch: updateZWay,
-    entry: updateZWay,
-    frontporch: updateZWay,
     parlor: updateParlor,
     recirc: updateZWay,
   };
