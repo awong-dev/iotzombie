@@ -31,7 +31,8 @@ func init() {
 		log.Fatalf("error getting Auth client: %v\n", err)
 	}
 
-	db, err = app.Database(context.Background())
+	db, err = app.DatabaseWithURL(context.Background(),
+		"https://iotzombie-153122.firebaseio.com")
 	if err != nil {
 		log.Fatalf("error getting Database client: %v\n", err)
 	}
@@ -83,9 +84,11 @@ func GetFirebaseIdToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	hasher := sha256.New()
-	hasher.Write([]byte("alg=" + alg + "&device_id=" + deviceId + "&secret=" + secret))
+	var toHash = []byte("alg=" + alg + "&device_id=" + deviceId + "&secret=" + secret)
+	hasher.Write(toHash)
 	calcuatedHmac := hex.EncodeToString(hasher.Sum(nil))
 	if calcuatedHmac != hmac {
+		log.Printf("toHash: %v, result: %v, received: %v", toHash, calcuatedHmac, hmac)
 		w.WriteHeader(http.StatusForbidden)
 		w.Write([]byte("invalid signature"))
 		return
