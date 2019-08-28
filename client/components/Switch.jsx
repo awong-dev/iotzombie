@@ -7,6 +7,6 @@ const Switch = ({onClick, name, icon, isOn}) => {
       <i className="material-icons device-entry-icon">{icon}</i> {name}
     </button>
   );
-}
+};
 
 export default Switch;

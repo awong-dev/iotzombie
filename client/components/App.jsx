@@ -13,11 +13,17 @@ class App extends React.Component {
   }
 
   toggleSwitch(id) {
+    this.props.devicesDbRef.update(
+      {
+        'devicesdev': null
+      }
+    );
     this.props.devicesDbRef.transaction((devices) => {
       if (devices) {
         // Avoid racing other UIs.
         if (devices[id].isOn === this.state.devices[id].isOn) {
           devices[id].isOn = !devices[id].isOn;
+          devices.count = (devices.count || 0) + 1;
         }
       }
       return devices;
