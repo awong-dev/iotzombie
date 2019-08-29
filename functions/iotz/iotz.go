@@ -2,8 +2,6 @@ package iotz
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	firebase "firebase.google.com/go"
 	auth "firebase.google.com/go/auth"
 	database "firebase.google.com/go/db"
@@ -57,40 +55,24 @@ func GetFirebaseIdToken(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hmac := query.Get("hmac")
-	if hmac == "" {
+	password := query.Get("password")
+	if password == "" {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Missing hmac"))
-		return
-	}
-	alg := query.Get("alg")
-	if alg == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Missing alg"))
-		return
-	}
-	if alg != "sha256" {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Only supports sha256 for now"))
+		w.Write([]byte("Missing password"))
 		return
 	}
 
 	// Find the device secret.
 	ctx := context.Background()
-	var secret string
-	err := db.NewRef("authn/devices/"+deviceId).Get(ctx, &secret)
+	var stored_password string
+	err := db.NewRef("authn/devices/"+deviceId).Get(ctx, &stored_password)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	hasher := sha256.New()
-	var toHash = []byte("alg=" + alg + "&device_id=" + deviceId + "&secret=" + secret)
-	hasher.Write(toHash)
-	calcuatedHmac := hex.EncodeToString(hasher.Sum(nil))
-	if calcuatedHmac != hmac {
-		log.Printf("toHash: %v, result: %v, received: %v", toHash, calcuatedHmac, hmac)
+	if stored_password != password {
 		w.WriteHeader(http.StatusForbidden)
-		w.Write([]byte("invalid signature"))
+		w.Write([]byte("invalid password"))
 		return
 	}
 
@@ -111,7 +93,6 @@ func GetFirebaseIdToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return the data in JSON format.
-	// TODO(awong): What is refresh_token here for??
-	fmt.Fprintf(w, "{ 'id_token': '%v', 'refresh_token': '%v', 'expires_in': %v, 'is_new_user': %v }",
-		response.IdToken, response.RefreshToken, response.ExpiresIn, response.IsNewUser)
+	fmt.Fprintf(w, "{ 'id_token': '%v', 'expires_in': %v, 'is_new_user': %v }",
+		response.IdToken, response.ExpiresIn, response.IsNewUser)
 }
