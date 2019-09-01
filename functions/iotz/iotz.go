@@ -93,6 +93,6 @@ func GetFirebaseIdToken(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Return the data in JSON format.
-	fmt.Fprintf(w, "{ 'id_token': '%v', 'expires_in': %v, 'is_new_user': %v }",
+	fmt.Fprintf(w, `{ "id_token": "%v", "expires_in": %v, "is_new_user": %v }`,
 		response.IdToken, response.ExpiresIn, response.IsNewUser)
 }
