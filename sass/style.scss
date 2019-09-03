@@ -11,7 +11,8 @@ $mdc-theme-secondary: #0277bd;
 }
 
 .device-list-header {
-  @include mdc-typography('title')
+  @include mdc-typography('headline5')
+  margin: .4em .4em .4em .4em;
   text-align: center;
   width: 100%;
   display: inline-block;
@@ -28,7 +29,7 @@ $mdc-theme-secondary: #0277bd;
 }
 
 .momentary-button {
-  @include mdc-button-filled-accessible($mdc-theme-secondary-dark)
+  @include mdc-button-filled-accessible($mdc-theme-on-secondary)
 }
 
 .device-on {
@@ -36,5 +37,5 @@ $mdc-theme-secondary: #0277bd;
 }
 
 .device-off {
-  @include mdc-button-filled-accessible($mdc-theme-primary-dark)
+  @include mdc-button-filled-accessible($mdc-theme-on-primary)
 }

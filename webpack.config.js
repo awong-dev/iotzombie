@@ -1,16 +1,16 @@
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const path = require('path');
 const glob = require('glob');
 const webpack = require('webpack');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-const extractSass = new ExtractTextPlugin({
-      filename: "[name].css"
-});
-
 const config = {
-  entry: { lights: ["./client/lights-entry.jsx"] },
+  entry: {
+    lights: [
+      "./client/lights-entry.jsx"
+    ]
+  },
   resolve: { extensions: ['.js', '.jsx'] },
   output: {
     path: path.join(__dirname, `./public/generated`),
@@ -21,18 +21,24 @@ const config = {
     rules: [
       {
         test: /\.scss$/,
-        use: extractSass.extract({
-          fallback: 'style-loader',
-          use: [
-            { loader: 'css-loader' },
-            { loader: 'sass-loader',
-              options: {
-                sourceMap: true,
+        use: [
+          {
+            loader:  MiniCssExtractPlugin.loader,
+            options: {
+              hmr: process.env.NODE_ENV === 'development',
+            },
+          },
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+              sassOptions: {
                 includePaths: glob.sync('node_modules').map((d) => path.join(__dirname, d)),
-              } }
-          ],
-          fallback: 'style-loader'
-        })
+              }
+            }
+          }
+        ],
       },
 	 {
 	   test: /\.jsx?$/,
@@ -40,12 +46,13 @@ const config = {
           path.resolve(__dirname, 'client'),
           path.resolve(__dirname, 'node_modules/@material')
         ],
+        exclude: /node_modules/,
 	   use: {
 		loader: 'babel-loader',
 		options: {
 		  // Also see .babelrc
 		  cacheDirectory: '.babelcache',
-            presets: ['env']
+            presets: ['@babel/preset-env']
 		}
 	   }
 	 }
@@ -57,8 +64,12 @@ const config = {
         NODE_ENV: isDevelopment ? "'development'" : "'production'"
       }
     }),
-
-    extractSass
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
   ],
 };
 
@@ -66,7 +77,7 @@ if (isDevelopment) {
   config.devtool = '#eval-source-map';
 } else {
   config.devtool = '#source-map';
-  config.plugins.push(new webpack.optimize.UglifyJsPlugin({sourceMap: true}));
+  config.optimization = {minimize: true};
 }
 
 module.exports = config;

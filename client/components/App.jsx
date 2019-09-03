@@ -1,5 +1,4 @@
 import React from 'react'
-import firebase from 'firebase'
 import update from 'immutability-helper'
 
 import DeviceList from './DeviceList'

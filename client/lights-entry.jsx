@@ -1,7 +1,9 @@
-import App from './components/App'
+import App from './components/App';
 import React from 'react';
-import ReactDOM from 'react-dom'
-import firebase from 'firebase'
+import ReactDOM from 'react-dom';
+import firebase from '@firebase/app';
+import '@firebase/auth';
+import '@firebase/database';
 
 require("../sass/style.scss");
 
