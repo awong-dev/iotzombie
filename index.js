@@ -3,7 +3,7 @@ const winston = require('winston');
 const express = require('express');
 const axios = require('axios');
 
-const logger = new (winston.Logger)({
+const logger = winston.createLogger({
   transports: [
     new (winston.transports.Console)({
       level:            'info',
