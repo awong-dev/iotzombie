@@ -9,14 +9,11 @@ class App extends React.Component {
     this.state = { devices: { } };
     this.onDbChange = this.onDbChange.bind(this);
     this.toggleSwitch = this.toggleSwitch.bind(this);
+    this.changeRgb = this.changeRgb.bind(this);
   }
 
+  // Flips the switch state.
   toggleSwitch(id) {
-    this.props.devicesDbRef.update(
-      {
-        'devicesdev': null
-      }
-    );
     this.props.devicesDbRef.transaction((devices) => {
       if (devices) {
         // Avoid racing other UIs.
@@ -29,11 +26,31 @@ class App extends React.Component {
     });
   }
 
+  // Sets new rgb values.
+  changeRgb(id, r, g, b) {
+    this.props.devicesDbRef.transaction((devices) => {
+      if (devices) {
+        const d = devices[id];
+        const local_d = this.state.devices[id];
+        // Avoid racing another update.
+        if (d &&
+            d.r === local_d.r &&
+            d.g === local_d.g &&
+            d.b === local_d.b) {
+          d.r = r;
+          d.g = g;
+          d.b = b;
+        }
+      }
+      return devices;
+    });
+  }
+
   onDbChange(snapshot) {
     if (snapshot.val()) {
       this.setState({devices: snapshot.val()});
     } else {
-      // TODO(ajwong): Uh oh. Show error.
+      console.error("Something wrong with DB update");
     }
   }
 
@@ -47,7 +64,10 @@ class App extends React.Component {
 
   render() {
     return (
-	 <DeviceList devices={this.state.devices} toggleSwitchFunc={this.toggleSwitch}/>
+      <DeviceList
+        devices={this.state.devices}
+        toggleSwitchFunc={this.toggleSwitch}
+        changeRgbFunc={this.changeRgb}/>
     );
   }
 }

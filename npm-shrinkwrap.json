@@ -2340,6 +2340,12 @@
         "protobufjs": "^6.8.6"
       }
     },
+    "@icons/material": {
+      "version": "0.2.4",
+      "resolved": "https://registry.npmjs.org/@icons/material/-/material-0.2.4.tgz",
+      "integrity": "sha512-QPcGmICAPbGLGb6F/yNf/KzKqvFx8z5qx3D1yFqVAjoFmXK35EgyW+cJ57Te3CNsmzblwtzakLGFqHPqrfb4Tw==",
+      "dev": true
+    },
     "@material/animation": {
       "version": "3.1.0",
       "resolved": "https://registry.npmjs.org/@material/animation/-/animation-3.1.0.tgz",
@@ -3923,8 +3929,7 @@
     "async-limiter": {
       "version": "1.0.1",
       "resolved": "https://registry.npmjs.org/async-limiter/-/async-limiter-1.0.1.tgz",
-      "integrity": "sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ==",
-      "dev": true
+      "integrity": "sha512-csOlWGAcRFJaI6m+F2WKdnMKr4HhdhFVBk0H/QbJFMCr+uO2kwohwXQPxw/9OCxp05r5ghVBFSyioixx3gfkNQ=="
     },
     "async-retry": {
       "version": "1.2.3",
@@ -13136,6 +13141,12 @@
         }
       }
     },
+    "material-colors": {
+      "version": "1.2.6",
+      "resolved": "https://registry.npmjs.org/material-colors/-/material-colors-1.2.6.tgz",
+      "integrity": "sha512-6qE4B9deFBIa9YSpOc9O0Sgc43zTeVYbgDT5veRKSlB2+ZuHNoVVxA1L/ckMUayV9Ay9y7Z/SZCLcGteW9i7bg==",
+      "dev": true
+    },
     "material-components-web": {
       "version": "3.1.1",
       "resolved": "https://registry.npmjs.org/material-components-web/-/material-components-web-3.1.1.tgz",
@@ -15361,6 +15372,20 @@
         "prop-types": "^15.6.2"
       }
     },
+    "react-color": {
+      "version": "2.17.3",
+      "resolved": "https://registry.npmjs.org/react-color/-/react-color-2.17.3.tgz",
+      "integrity": "sha512-1dtO8LqAVotPIChlmo6kLtFS1FP89ll8/OiA8EcFRDR+ntcK+0ukJgByuIQHRtzvigf26dV5HklnxDIvhON9VQ==",
+      "dev": true,
+      "requires": {
+        "@icons/material": "^0.2.4",
+        "lodash": "^4.17.11",
+        "material-colors": "^1.2.1",
+        "prop-types": "^15.5.10",
+        "reactcss": "^1.2.0",
+        "tinycolor2": "^1.4.1"
+      }
+    },
     "react-dom": {
       "version": "16.9.0",
       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-16.9.0.tgz",
@@ -15471,6 +15496,15 @@
         "react-router": "5.0.1",
         "tiny-invariant": "^1.0.2",
         "tiny-warning": "^1.0.0"
+      }
+    },
+    "reactcss": {
+      "version": "1.2.3",
+      "resolved": "https://registry.npmjs.org/reactcss/-/reactcss-1.2.3.tgz",
+      "integrity": "sha512-KiwVUcFu1RErkI97ywr8nvx8dNOpT03rbnma0SSalTYjkrPYaEajR4a/MRt6DZ46K6arDRbWMNHF+xH7G7n/8A==",
+      "dev": true,
+      "requires": {
+        "lodash": "^4.0.1"
       }
     },
     "read-pkg": {
@@ -18155,6 +18189,12 @@
       "integrity": "sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==",
       "dev": true
     },
+    "tinycolor2": {
+      "version": "1.4.1",
+      "resolved": "https://registry.npmjs.org/tinycolor2/-/tinycolor2-1.4.1.tgz",
+      "integrity": "sha1-9PrTM0R7wLB9TcjpIJ2POaisd+g=",
+      "dev": true
+    },
     "tmp": {
       "version": "0.0.33",
       "resolved": "https://registry.npmjs.org/tmp/-/tmp-0.0.33.tgz",
@@ -20655,6 +20695,15 @@
           "integrity": "sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=",
           "dev": true
         },
+        "ws": {
+          "version": "6.2.1",
+          "resolved": "https://registry.npmjs.org/ws/-/ws-6.2.1.tgz",
+          "integrity": "sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==",
+          "dev": true,
+          "requires": {
+            "async-limiter": "~1.0.0"
+          }
+        },
         "yargs": {
           "version": "12.0.5",
           "resolved": "https://registry.npmjs.org/yargs/-/yargs-12.0.5.tgz",
@@ -20948,12 +20997,11 @@
       }
     },
     "ws": {
-      "version": "6.2.1",
-      "resolved": "https://registry.npmjs.org/ws/-/ws-6.2.1.tgz",
-      "integrity": "sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==",
-      "dev": true,
+      "version": "7.1.2",
+      "resolved": "https://registry.npmjs.org/ws/-/ws-7.1.2.tgz",
+      "integrity": "sha512-gftXq3XI81cJCgkUiAVixA0raD9IVmXqsylCrjRygw4+UOOGzPoxnQ6r/CnVL9i+mDncJo94tSkyrtuuQVBmrg==",
       "requires": {
-        "async-limiter": "~1.0.0"
+        "async-limiter": "^1.0.0"
       }
     },
     "xdg-basedir": {

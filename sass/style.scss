@@ -10,6 +10,23 @@ $mdc-theme-secondary: #0277bd;
   --mdc-theme-text-primary-on-primary: var(--mdc-theme-text-primary-on-dark);
 }
 
+.rgb-list-item {
+  height: auto;
+  text-align: center;
+  @include mdc-button-filled-accessible($mdc-theme-on-primary)
+}
+
+.rgb-control {
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.rgb-control-name {
+  margin-top: .4em;
+  margin-bottom: .4em;
+}
+
 .device-list-header {
   @include mdc-typography('headline5')
   margin: .4em .4em .4em .4em;
