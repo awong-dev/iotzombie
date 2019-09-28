@@ -52,9 +52,12 @@ function init() {
   firebase.auth().onAuthStateChanged(function(user) {
     // No user is signed in.
     if (!user) {
+      console.warn("Not logged in!");
 	 const provider = new firebase.auth.GoogleAuthProvider();
 	 firebase.auth().signInWithRedirect(provider);
     }
+    console.warn(`user authenticated: ${user.uid}, ${user.tenantId}, ${user.email}, ${user.displayName}`);
+    console.warn(user);
   });
 
   initReact();
