@@ -89,6 +89,7 @@ if (module === require.main) {
         devicesDbRef.set(deviceState);
       } else {
         logger.info('Received Server update.');
+        logger.info(JSON.stringify(serverDeviceState));
         // For each device, check if there's a change and if yes, then push
         // an update.
         for (const deviceId in serverDeviceState) {
@@ -96,7 +97,12 @@ if (module === require.main) {
           if (deviceFunc) {
             deviceFunc(deviceState[deviceId].isOn, serverDeviceState[deviceId].isOn, deviceId);
           }
-          deviceState[deviceId].isOn = serverDeviceState[deviceId].isOn;
+
+          if (deviceId in deviceState) {
+	    deviceState[deviceId].isOn = serverDeviceState[deviceId].isOn;
+	  } else {
+	    deviceState[deviceId] = JSON.parse(JSON.stringify(serverDeviceState[deviceId]));
+	  }
         }
       }
     }
