@@ -86,7 +86,13 @@ if (module === require.main) {
       // then drop the server update.
       if (serverDeviceState.deviceClock !== deviceState.deviceClock) {
         logger.info(`Server had outdated deviceClock. Server: ${serverDeviceState.deviceClock}. Local: ${deviceState.deviceClock}`);
-        devicesDbRef.set(deviceState);
+        // Overwrite each device individually to avoid stomping on devices
+        // not under this units control.
+        for (const deviceId in deviceState) {
+          serverDeviceState[deviceId] = deviceState[deviceId];
+        }
+        serverDeviceState.deviceClock = deviceState.deviceClock;
+        devicesDbRef.set(serverDeviceState);
       } else {
         logger.info('Received Server update.');
         logger.info(JSON.stringify(serverDeviceState));
@@ -99,10 +105,10 @@ if (module === require.main) {
           }
 
           if (deviceId in deviceState) {
-	    deviceState[deviceId].isOn = serverDeviceState[deviceId].isOn;
-	  } else {
-	    deviceState[deviceId] = JSON.parse(JSON.stringify(serverDeviceState[deviceId]));
-	  }
+            deviceState[deviceId].isOn = serverDeviceState[deviceId].isOn;
+          } else {
+            deviceState[deviceId] = JSON.parse(JSON.stringify(serverDeviceState[deviceId]));
+          }
         }
       }
     }
