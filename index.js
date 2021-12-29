@@ -18,8 +18,8 @@ const logger = winston.createLogger({
 
 // These are hardcoded values from the zwave network.
 const zWayIds = {
-  backporch: 'ZWayVDev_zway_2-0-37',
-  recirc: 'ZWayVDev_zway_3-0-37',
+  backporch: 'ZWayVDev_zway_10-0-37',
+  recirc: 'ZWayVDev_zway_5-0-37',
 };
 const zWayDevApiBase = 'http://127.0.0.1:8083/ZAutomation/api/v1/devices'
 
